@@ -3,17 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Halfy Store</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet">
+<title>Halfy Times</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+
 :root{
-    --paper:#f4ecd8;
-    --paper-dark:#e4d6b3;
-    --ink:#2d2418;
-    --accent:#7a5c3e;
-    --border:#a1885f;
+    --paper:#f6eedb;
+    --paper-dark:#eadbb7;
+    --ink:#2a241d;
+    --accent:#7b5e3b;
+    --border:#9d825e;
 }
 
 *{
@@ -22,12 +24,94 @@
     box-sizing:border-box;
 }
 
+html{
+    scroll-behavior:smooth;
+}
+
 body{
     background:var(--paper);
     color:var(--ink);
     font-family:'Cormorant Garamond',serif;
-    line-height:1.6;
+    overflow-x:hidden;
 }
+
+/* TEXTURE */
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:.08;
+    background-image:
+    repeating-linear-gradient(
+    45deg,
+    rgba(0,0,0,.05) 0px,
+    rgba(0,0,0,.05) 1px,
+    transparent 1px,
+    transparent 4px);
+}
+
+/* HEADER */
+
+.hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:40px 20px;
+}
+
+.badge{
+    border:2px solid var(--border);
+    padding:8px 18px;
+    margin-bottom:20px;
+    font-family:'Special Elite',cursive;
+    letter-spacing:2px;
+    background:#fff7e7;
+    animation:float 4s infinite ease-in-out;
+}
+
+.hero h1{
+    font-family:'Special Elite',cursive;
+    font-size:4rem;
+    letter-spacing:5px;
+    margin-bottom:15px;
+    animation:fadeUp 1s ease;
+}
+
+.hero p{
+    max-width:700px;
+    font-size:1.3rem;
+    margin-bottom:30px;
+    animation:fadeUp 1.3s ease;
+}
+
+.cta{
+    display:inline-block;
+    text-decoration:none;
+    color:white;
+    background:var(--accent);
+    padding:14px 30px;
+    border-radius:999px;
+    transition:.3s;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+.cta:hover{
+    transform:translateY(-4px);
+}
+
+.divider{
+    text-align:center;
+    font-size:1.5rem;
+    margin:50px 0;
+    color:var(--accent);
+}
+
+/* SECTION */
 
 .container{
     width:90%;
@@ -35,65 +119,62 @@ body{
     margin:auto;
 }
 
-header{
+.title{
     text-align:center;
-    padding:60px 20px;
-    border-bottom:3px double var(--border);
+    margin-bottom:40px;
 }
 
-header h1{
-    font-size:3.5rem;
+.title h2{
     font-family:'Special Elite',cursive;
-    letter-spacing:3px;
+    font-size:2.5rem;
 }
 
-header p{
-    max-width:700px;
-    margin:15px auto;
-    font-size:1.2rem;
-}
+/* CARDS */
 
-.section-title{
-    text-align:center;
-    margin:50px 0 25px;
-    font-size:2rem;
-    font-family:'Special Elite',cursive;
-    border-bottom:2px dashed var(--border);
-    display:inline-block;
-    padding-bottom:5px;
-}
-
-.center{
-    text-align:center;
-}
-
-.products{
+.grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:25px;
-    margin-bottom:50px;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:30px;
 }
 
 .card{
-    background:rgba(255,255,255,.25);
+    background:rgba(255,255,255,.45);
     border:2px solid var(--border);
-    padding:20px;
-    border-radius:8px;
-    box-shadow:4px 4px 0 rgba(0,0,0,.08);
+    border-radius:20px;
+    padding:25px;
+    backdrop-filter:blur(4px);
+    transition:.35s;
+    position:relative;
+    overflow:hidden;
 }
 
-.card img{
+.card::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-100%;
     width:100%;
-    height:180px;
-    object-fit:cover;
-    border:1px solid var(--border);
-    margin-bottom:15px;
-    filter:sepia(35%);
+    height:100%;
+    background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.4),
+    transparent);
+    transition:.8s;
+}
+
+.card:hover::before{
+    left:100%;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 20px 40px rgba(0,0,0,.12);
 }
 
 .card h3{
-    font-size:1.8rem;
-    margin-bottom:10px;
+    font-size:2rem;
+    margin-bottom:15px;
 }
 
 .card ul{
@@ -101,138 +182,201 @@ header p{
 }
 
 .card li{
-    margin:6px 0;
-}
-
-.price{
-    font-weight:bold;
-}
-
-.contact{
-    background:var(--paper-dark);
-    padding:30px;
-    border:2px solid var(--border);
-    margin-bottom:50px;
-}
-
-.contact h2{
-    margin-bottom:15px;
-}
-
-.contact p{
     margin:8px 0;
 }
 
+.price{
+    background:#fff;
+    border:1px solid var(--border);
+    padding:3px 10px;
+    border-radius:999px;
+    font-weight:bold;
+}
+
+/* STAMP */
+
+.stamp{
+    position:absolute;
+    top:15px;
+    right:15px;
+    border:3px solid #a52a2a;
+    color:#a52a2a;
+    padding:4px 10px;
+    transform:rotate(12deg);
+    font-family:'Special Elite';
+    opacity:.7;
+}
+
+/* CONTACT */
+
+.contact{
+    margin:100px auto;
+    background:rgba(255,255,255,.4);
+    border:2px solid var(--border);
+    border-radius:20px;
+    padding:35px;
+}
+
+.contact h2{
+    font-family:'Special Elite';
+    margin-bottom:20px;
+}
+
+.contact p{
+    margin:10px 0;
+    font-size:1.1rem;
+}
+
+/* FOOTER */
+
 footer{
     text-align:center;
-    padding:25px;
-    border-top:3px double var(--border);
-    font-family:'Special Elite',cursive;
+    padding:30px;
+    border-top:2px dashed var(--border);
+    font-family:'Special Elite';
+}
+
+/* ANIMATIONS */
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(40px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes float{
+    50%{
+        transform:translateY(-6px);
+    }
 }
 
 @media(max-width:768px){
-    header h1{
-        font-size:2.4rem;
-    }
 
-    .section-title{
-        font-size:1.6rem;
-    }
+.hero h1{
+    font-size:2.5rem;
 }
+
+.title h2{
+    font-size:1.8rem;
+}
+
+}
+
 </style>
 </head>
 <body>
 
-<header>
-    <div class="container">
-        <h1>HALFY STORE</h1>
-        <p>
-            Lembaran katalog digital bergaya koran klasik.
-            Menyediakan layanan bot WhatsApp, panel Pterodactyl,
-            dan script WhatsApp Neko-Arc dengan harga terjangkau.
-        </p>
-    </div>
-</header>
+<section class="hero">
+
+<div class="badge">
+HALFY TIMES • DIGITAL MARKETPLACE
+</div>
+
+<h1>HALFY STORE</h1>
+
+<p>
+Bot WhatsApp, Panel Pterodactyl, dan Script Neko-Arc
+dengan harga ramah kantong dan layanan cepat.
+</p>
+
+<a href="https://wa.me/6285706606594" class="cta">
+Hubungi Saya
+</a>
+
+</section>
+
+<div class="divider">❦ ❦ ❦</div>
 
 <section class="container">
 
-    <div class="center">
-        <h2 class="section-title">Daftar Produk</h2>
-    </div>
+<div class="title">
+<h2>Daftar Produk</h2>
+</div>
 
-    <div class="products">
+<div class="grid">
 
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800" alt="Bot WhatsApp">
+<div class="card">
 
-            <h3>Sewa Bot WhatsApp</h3>
+<div class="stamp">BEST SELLER</div>
 
-            <strong>LIST SEWA BOT</strong>
-            <ul>
-                <li>Perhari / Daily — <span class="price">3K</span></li>
-                <li>Perminggu / Weekly — <span class="price">8K</span></li>
-                <li>Perbulan / Monthly — <span class="price">13K</span></li>
-            </ul>
+<h3>Sewa Bot WhatsApp</h3>
 
-            <br>
+<ul>
+<li>Daily — <span class="price">3K</span></li>
+<li>Weekly — <span class="price">8K</span></li>
+<li>Monthly — <span class="price">13K</span></li>
+</ul>
 
-            <strong>PREMIUM USER</strong>
-            <ul>
-                <li>Perminggu / Weekly — <span class="price">5K</span></li>
-                <li>Perbulan / Monthly — <span class="price">10K</span></li>
-            </ul>
-        </div>
+<br>
 
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800" alt="Panel">
+<strong>Premium User</strong>
 
-            <h3>Panel Pterodactyl</h3>
+<ul>
+<li>Weekly — <span class="price">5K</span></li>
+<li>Monthly — <span class="price">10K</span></li>
+</ul>
 
-            <ul>
-                <li>1GB — <span class="price">2K</span></li>
-                <li>2GB — <span class="price">4K</span></li>
-                <li>3GB — <span class="price">6K</span></li>
-                <li>4GB — <span class="price">8K</span></li>
-                <li>5GB — <span class="price">10K</span></li>
-                <li>Unlimited — <span class="price">12K</span></li>
-                <li>Reseller — <span class="price">15K</span></li>
-                <li>Admin Panel — <span class="price">25K</span></li>
-            </ul>
-        </div>
+</div>
 
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=800" alt="Script">
+<div class="card">
 
-            <h3>Script Bot WhatsApp Neko-Arc</h3>
+<div class="stamp">POPULAR</div>
 
-            <ul>
-                <li>UI Simple</li>
-                <li>Rapi</li>
-                <li>Button Interactive</li>
-                <li>Free API Key</li>
-                <li>Mudah Dikustomisasi</li>
-                <li>No Encryption 100%</li>
-            </ul>
-        </div>
+<h3>Panel Pterodactyl</h3>
 
-    </div>
+<ul>
+<li>1GB — <span class="price">2K</span></li>
+<li>2GB — <span class="price">4K</span></li>
+<li>3GB — <span class="price">6K</span></li>
+<li>4GB — <span class="price">8K</span></li>
+<li>5GB — <span class="price">10K</span></li>
+<li>Unlimited — <span class="price">12K</span></li>
+<li>Reseller — <span class="price">15K</span></li>
+<li>Admin Panel — <span class="price">25K</span></li>
+</ul>
 
-    <div class="center">
-        <h2 class="section-title">Narahubung</h2>
-    </div>
+</div>
 
-    <div class="contact">
-        <p><strong>WhatsApp:</strong> 085706606594</p>
-        <p><strong>GitHub:</strong> Mirai-Kanade</p>
-        <p><strong>Instagram:</strong> kersenify666</p>
-        <p><strong>Telegram:</strong> @jinkasei</p>
-        <p><strong>Gmail:</strong> halfyzodiac@gmail.com</p>
-    </div>
+<div class="card">
+
+<div class="stamp">NEW</div>
+
+<h3>Script Neko-Arc</h3>
+
+<ul>
+<li>UI Simple</li>
+<li>Rapi</li>
+<li>Button Interactive</li>
+<li>Free API Key</li>
+<li>Mudah Dikustomisasi</li>
+<li>No Encryption 100%</li>
+</ul>
+
+</div>
+
+</div>
+
+<div class="contact">
+
+<h2>Narahubung</h2>
+
+<p><strong>WhatsApp:</strong> 085706606594</p>
+<p><strong>GitHub:</strong> Mirai-Kanade</p>
+<p><strong>Instagram:</strong> kersenify666</p>
+<p><strong>Telegram:</strong> @jinkasei</p>
+<p><strong>Email:</strong> halfyzodiac@gmail.com</p>
+
+</div>
 
 </section>
 
 <footer>
-    © 2026 Artoria Store • Vintage Edition
+© 2026 ARTORIA • Your Highness
 </footer>
 
 </body>
