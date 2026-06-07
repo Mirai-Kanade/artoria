@@ -3,685 +3,185 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Digital Gazette — Artoria Store</title>
+  <title>Artoria - Your Highness</title>
+  <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Special+Elite&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
-
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --ink:        #1a1008;
-      --ink-faded:  #4a3828;
-      --ink-light:  #7a6248;
-      --paper:      #f4edd8;
-      --paper-dark: #e8dcc0;
-      --paper-tan:  #d9c9a3;
-      --rule:       #b8a07a;
-      --accent:     #8b2500;
-      --gold:       #c8982a;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background-color: var(--paper-dark);
-      color: var(--ink);
-      font-family: 'Libre Baskerville', Georgia, serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* lined paper texture */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        repeating-linear-gradient(
-          0deg,
-          transparent,
-          transparent 27px,
-          rgba(160,130,80,0.08) 27px,
-          rgba(160,130,80,0.08) 28px
-        );
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* ── PAGE LOAD ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes inkDraw {
-      from { width: 0; }
-      to   { width: 100%; }
-    }
-    @keyframes ticker {
-      0%   { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
-
-    .gazette {
-      position: relative;
-      z-index: 1;
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 0 1.25rem 4rem;
-    }
-
-
-    .contact-item a.value {
-  color: var(--paper);
-  text-decoration: none;
-  border-bottom: 1px solid rgba(244,237,216,0.25);
-  transition: border-color 0.2s, color 0.2s;
-}
-.contact-item a.value:hover {
-  color: var(--gold);
-  border-color: var(--gold);
-}
-
-    /* ── MASTHEAD ── */
-    .masthead {
-      text-align: center;
-      padding: 2.5rem 1rem 0;
-      border-bottom: 4px double var(--rule);
-      animation: slideDown 0.7s ease both;
-    }
-
-    .masthead-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-family: 'Special Elite', monospace;
-      font-size: 0.7rem;
-      color: var(--ink-light);
-      letter-spacing: 0.05em;
-      margin-bottom: 0.75rem;
-    }
-
-    .masthead-title {
-      font-family: 'UnifrakturMaguntia', cursive;
-      font-size: clamp(2.8rem, 9vw, 5.5rem);
-      line-height: 1;
-      color: var(--ink);
-      letter-spacing: -0.01em;
-      text-shadow: 2px 2px 0 rgba(0,0,0,0.12);
-      position: relative;
-      display: inline-block;
-    }
-
-    /* ink-draw underline on title */
-    .masthead-title::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      height: 2px;
-      background: var(--ink);
-      animation: inkDraw 1s 0.5s ease both;
-      width: 0;
-    }
-
-    .masthead-rule {
-      border: none;
-      border-top: 2px solid var(--ink);
-      margin: 0.65rem 0 0.4rem;
-    }
-
-    .masthead-sub {
-      font-family: 'Special Elite', monospace;
-      font-size: clamp(0.65rem, 2vw, 0.85rem);
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--ink-faded);
-      padding-bottom: 0.75rem;
-    }
-
-    /* ── TICKER BANNER ── */
-    .edition-banner {
-      background: var(--ink);
-      color: var(--paper);
-      font-family: 'Special Elite', monospace;
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      padding: 0.35rem 0;
-      overflow: hidden;
-      white-space: nowrap;
-      animation: fadeIn 0.5s 0.3s both;
-    }
-    .edition-banner span {
-      display: inline-block;
-      animation: ticker 22s linear infinite;
-      text-transform: uppercase;
-    }
-
-    /* ── LEAD ── */
-    .lead {
-      text-align: center;
-      max-width: 600px;
-      margin: 1.5rem auto 2rem;
-      font-size: 0.88rem;
-      font-style: italic;
-      line-height: 1.8;
-      color: var(--ink-faded);
-      border-top: 1px solid var(--rule);
-      border-bottom: 1px solid var(--rule);
-      padding: 0.85rem 1.2rem;
-      animation: fadeUp 0.6s 0.4s both;
-    }
-
-    /* ── ORNAMENT ── */
-    .ornament {
-      text-align: center;
-      color: var(--gold);
-      font-size: 1.1rem;
-      margin: 0.2rem 0;
-      letter-spacing: 0.5rem;
-    }
-
-    /* ── SECTION HEADING ── */
-    .section-head {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 0.75rem;
-      margin: 2.5rem 0 1.4rem;
-    }
-    .section-head::before,
-    .section-head::after {
-      content: '';
-      border-top: 1px solid var(--rule);
-    }
-    .section-head h2 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(1rem, 3vw, 1.4rem);
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      white-space: nowrap;
-      color: var(--ink);
-    }
-
-    /* ── CARDS ── */
-    .product-grid {
-      display: grid;
-      gap: 1.5rem;
-    }
-    .product-grid.two-col { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-
-    .card {
-      background: var(--paper);
-      border: 1px solid var(--rule);
-      padding: 1.4rem 1.5rem;
-      position: relative;
-      transition: box-shadow 0.25s ease, transform 0.25s ease;
-    }
-    .card::before {
-      content: '';
-      position: absolute;
-      inset: 4px;
-      border: 1px dashed rgba(160,130,80,0.32);
-      pointer-events: none;
-    }
-    .card:hover {
-      box-shadow: 5px 5px 0 rgba(0,0,0,0.1);
-      transform: translate(-2px, -2px);
-    }
-
-    .card-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 0.35rem;
-      color: var(--ink);
-    }
-
-    .card-desc {
-      font-size: 0.79rem;
-      color: var(--ink-light);
-      font-style: italic;
-      margin-bottom: 0.85rem;
-      line-height: 1.55;
-    }
-
-    .price-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-family: 'Special Elite', monospace;
-      font-size: 0.78rem;
-    }
-    .price-table tr { border-bottom: 1px dotted var(--rule); }
-    .price-table tr:last-child { border-bottom: none; }
-    .price-table td { padding: 0.3rem 0; }
-    .price-table td:last-child {
-      text-align: right;
-      font-weight: bold;
-      color: var(--accent);
-    }
-
-    /* ── PANEL TIERS ── */
-    .panel-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
-      gap: 0.75rem;
-    }
-
-    .panel-tier {
-      background: var(--paper);
-      border: 1px solid var(--rule);
-      text-align: center;
-      padding: 0.9rem 0.4rem;
-      position: relative;
-      transition: box-shadow 0.22s, transform 0.22s;
-    }
-    .panel-tier:hover {
-      box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
-      transform: translate(-2px, -2px);
-    }
-    .panel-tier.featured {
-      border-color: var(--accent);
-      background: #fff9f2;
-    }
-    .panel-tier.featured::after {
-      content: 'Populer';
-      position: absolute;
-      top: -0.6rem;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--accent);
-      color: #fff9f2;
-      font-family: 'Special Elite', monospace;
-      font-size: 0.58rem;
-      padding: 0.12rem 0.45rem;
-      white-space: nowrap;
-      letter-spacing: 0.08em;
-    }
-    .panel-tier .ram {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.25rem;
-      font-weight: 900;
-      color: var(--ink);
-      line-height: 1;
-    }
-    .panel-tier .ram-label {
-      font-family: 'Special Elite', monospace;
-      font-size: 0.6rem;
-      color: var(--ink-light);
-      letter-spacing: 0.05em;
-      margin-bottom: 0.4rem;
-    }
-    .panel-tier .price {
-      font-family: 'Special Elite', monospace;
-      font-size: 0.95rem;
-      font-weight: bold;
-      color: var(--accent);
-    }
-
-    /* ── SCRIPT CARD ── */
-    .card-wide {
-      background: var(--paper);
-      border: 1px solid var(--rule);
-      padding: 1.6rem 1.8rem;
-      position: relative;
-      transition: box-shadow 0.25s, transform 0.25s;
-    }
-    .card-wide::before {
-      content: '';
-      position: absolute;
-      inset: 5px;
-      border: 1px dashed rgba(160,130,80,0.28);
-      pointer-events: none;
-    }
-    .card-wide:hover {
-      box-shadow: 5px 5px 0 rgba(0,0,0,0.1);
-      transform: translate(-2px, -2px);
-    }
-    .card-wide .card-title { font-size: 1.2rem; margin-bottom: 0.5rem; }
-    .card-wide-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-top: 0.8rem;
-    }
-    @media (max-width: 520px) { .card-wide-inner { grid-template-columns: 1fr; } }
-
-    .feature-list {
-      list-style: none;
-      font-family: 'Special Elite', monospace;
-      font-size: 0.8rem;
-      line-height: 2;
-      color: var(--ink-faded);
-    }
-    .feature-list li::before {
-      content: '* ';
-      color: var(--gold);
-    }
-
-    .script-price-box {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
-      border-left: 1px dashed var(--rule);
-      padding-left: 1.5rem;
-    }
-    .script-tier {
-      text-align: center;
-    }
-    .script-tier .tier-label {
-      font-family: 'Special Elite', monospace;
-      font-size: 0.62rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--ink-light);
-      margin-bottom: 0.15rem;
-    }
-    .script-tier .tier-price {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      font-weight: 900;
-      color: var(--accent);
-      line-height: 1;
-    }
-    .script-tier .tier-note {
-      font-family: 'Special Elite', monospace;
-      font-size: 0.6rem;
-      color: var(--ink-light);
-      margin-top: 0.1rem;
-    }
-    .script-divider {
-      width: 1px;
-      height: 40px;
-      background: var(--rule);
-    }
-
-    /* ── CONTACT ── */
-    .contact-block {
-      background: var(--ink);
-      color: var(--paper);
-      padding: 2rem 2rem 1.75rem;
-      margin-top: 3rem;
-      position: relative;
-      text-align: center;
-      transition: box-shadow 0.25s;
-    }
-    .contact-block::before {
-      content: '';
-      position: absolute;
-      inset: 6px;
-      border: 1px solid rgba(244,237,216,0.2);
-      pointer-events: none;
-    }
-    .contact-block h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      font-weight: 900;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.25rem;
-    }
-    .contact-block .sub {
-      font-family: 'Special Elite', monospace;
-      font-size: 0.68rem;
-      letter-spacing: 0.15em;
-      color: var(--paper-tan);
-      margin-bottom: 1.5rem;
-      text-transform: uppercase;
-    }
-    .contact-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 0.9rem;
-      text-align: left;
-    }
-    .contact-item { display: flex; flex-direction: column; gap: 0.1rem; }
-    .contact-item .label {
-      font-family: 'Special Elite', monospace;
-      font-size: 0.58rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold);
-    }
-    .contact-item .value {
-      font-family: 'Libre Baskerville', serif;
-      font-size: 0.8rem;
-      color: var(--paper);
-    }
-
-    /* ── FOOTER ── */
-    .footer {
-      text-align: center;
-      font-family: 'Special Elite', monospace;
-      font-size: 0.63rem;
-      letter-spacing: 0.12em;
-      color: var(--ink-light);
-      padding-top: 2rem;
-      text-transform: uppercase;
-    }
-
-    /* ── STAGGERED FADE-UP on sections ── */
-    .fade-section {
-      animation: fadeUp 0.6s ease both;
-    }
-    .fade-section:nth-child(1)  { animation-delay: 0.15s; }
-    .fade-section:nth-child(2)  { animation-delay: 0.25s; }
-    .fade-section:nth-child(3)  { animation-delay: 0.35s; }
-    .fade-section:nth-child(4)  { animation-delay: 0.45s; }
-    .fade-section:nth-child(5)  { animation-delay: 0.55s; }
-
-    @media (max-width: 600px) {
-      .masthead-top { flex-direction: column; gap: 0.3rem; text-align: center; }
-      .card, .card-wide { padding: 1.1rem; }
-      .script-price-box { border-left: none; border-top: 1px dashed var(--rule); padding-left: 0; padding-top: 1rem; }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Special+Elite&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-<div class="gazette">
+  <!-- PAPER TEXTURE OVERLAY -->
+  <div class="paper-overlay"></div>
 
-  <!-- MASTHEAD -->
-  <header class="masthead">
-    <div class="masthead-top">
-      <span>Vol. I &nbsp;·&nbsp; No. 1</span>
-      <span>Harga dalam Rupiah &nbsp;·&nbsp; Berlaku hingga dicabut</span>
-      <span>Est. 2025</span>
+  <!-- TOP BANNER -->
+  <div class="top-banner">
+    <span>Edisi Terbatas &nbsp;|&nbsp; Harga Terjangkau &nbsp;|&nbsp; Layanan Terpercaya</span>
+  </div>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-date">
+      <span id="current-date">Minggu, 07 Juni 2026</span>
     </div>
-    <div class="masthead-title">The Digital Gazette</div>
-    <hr class="masthead-rule" />
-    <div class="masthead-sub">Artoria Store &nbsp;·&nbsp; Jasa dan Produk Digital</div>
+    <div class="header-brand">
+      <div class="brand-gothic">Artoria</div>
+      <div class="brand-rule"></div>
+      <div class="brand-slogan">Your Highness &mdash; Artoria</div>
+      <div class="brand-rule"></div>
+      <div class="brand-tagline">Solusi Digital Berkelas untuk Kebutuhan Anda</div>
+    </div>
+    <div class="header-edition">
+      <span>Vol. I, No. 1</span><br />
+      <span>Harga: Gratis</span>
+    </div>
   </header>
 
-  <!-- TICKER -->
-  <div class="edition-banner">
-    <span>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      Sewa Bot WhatsApp &nbsp;·&nbsp; Panel Pterodactyl &nbsp;·&nbsp; Script Neko-Arc
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      Hubungi kami untuk info lebih lanjut &nbsp;·&nbsp; WA: 085706606594
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      Sewa Bot WhatsApp &nbsp;·&nbsp; Panel Pterodactyl &nbsp;·&nbsp; Script Neko-Arc
-      &nbsp;&nbsp;&nbsp;&nbsp;
-    </span>
-  </div>
+  <!-- NAVIGATION -->
+  <nav class="main-nav">
+    <ul>
+      <li><a href="index.html" class="active">Beranda</a></li>
+      <li><a href="products.html">Produk</a></li>
+      <li><a href="contact.html">Kontak</a></li>
+    </ul>
+  </nav>
 
-  <!-- LEAD -->
-  <p class="lead">
-    Toko ini menjual beberapa layanan digital — mulai dari sewa bot WhatsApp,
-    panel Pterodactyl untuk hosting, hingga script bot siap pakai.
-    Harga terjangkau, tidak ribet, bisa langsung hubungi kontak di bawah.
-  </p>
+  <!-- HERO SECTION -->
+  <main class="container">
 
-  <!-- ══ SEWA BOT WHATSAPP ══ -->
-  <div class="section-head fade-section">
-    <span></span>
-    <h2>Sewa Bot WhatsApp</h2>
-    <span></span>
-  </div>
-
-  <div class="ornament">* * *</div>
-
-  <div class="product-grid two-col fade-section" style="margin-top:1.2rem;">
-
-    <div class="card">
-      <div class="card-title">List Sewa Bot</div>
-      <div class="card-desc">Bot WhatsApp siap pakai, aktif selama masa sewa.</div>
-      <table class="price-table">
-        <tr><td>Perhari</td><td>Rp 3.000</td></tr>
-        <tr><td>Perminggu</td><td>Rp 8.000</td></tr>
-        <tr><td>Perbulan</td><td>Rp 13.000</td></tr>
-      </table>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Premium User</div>
-      <div class="card-desc">Akses fitur lebih banyak di dalam bot dengan status premium.</div>
-      <table class="price-table">
-        <tr><td>Perminggu</td><td>Rp 5.000</td></tr>
-        <tr><td>Perbulan</td><td>Rp 10.000</td></tr>
-      </table>
-    </div>
-
-  </div>
-
-  <!-- ══ PANEL PTERODACTYL ══ -->
-  <div class="section-head fade-section" style="margin-top:3rem;">
-    <span></span>
-    <h2>Panel Pterodactyl</h2>
-    <span></span>
-  </div>
-
-  <div class="ornament">* * *</div>
-
-  <div class="panel-grid fade-section" style="margin-top:1.1rem;">
-    <div class="panel-tier">
-      <div class="ram">1 GB</div>
-      <div class="ram-label">RAM</div>
-      <div class="price">Rp 2.000</div>
-    </div>
-    <div class="panel-tier">
-      <div class="ram">2 GB</div>
-      <div class="ram-label">RAM</div>
-      <div class="price">Rp 4.000</div>
-    </div>
-    <div class="panel-tier featured">
-      <div class="ram">3 GB</div>
-      <div class="ram-label">RAM</div>
-      <div class="price">Rp 6.000</div>
-    </div>
-    <div class="panel-tier">
-      <div class="ram">4 GB</div>
-      <div class="ram-label">RAM</div>
-      <div class="price">Rp 8.000</div>
-    </div>
-    <div class="panel-tier">
-      <div class="ram">5 GB</div>
-      <div class="ram-label">RAM</div>
-      <div class="price">Rp 10.000</div>
-    </div>
-    <div class="panel-tier">
-      <div class="ram">&#x221E;</div>
-      <div class="ram-label">Unlimited</div>
-      <div class="price">Rp 12.000</div>
-    </div>
-    <div class="panel-tier">
-      <div class="ram" style="font-size:0.95rem;">Reseller</div>
-      <div class="ram-label">&nbsp;</div>
-      <div class="price">Rp 15.000</div>
-    </div>
-    <div class="panel-tier">
-      <div class="ram" style="font-size:0.9rem;">Admin</div>
-      <div class="ram-label">Panel</div>
-      <div class="price">Rp 25.000</div>
-    </div>
-  </div>
-
-  <!-- ══ SCRIPT NEKO-ARC ══ -->
-  <div class="section-head fade-section" style="margin-top:3rem;">
-    <span></span>
-    <h2>Script Bot Neko-Arc</h2>
-    <span></span>
-  </div>
-
-  <div class="ornament">* * *</div>
-
-  <div class="card-wide fade-section" style="margin-top:1.2rem;">
-    <div class="card-title">Script Bot WhatsApp — Neko-Arc</div>
-    <div class="card-desc">Script ringan, tidak ada enkripsi, mudah dimodifikasi sesuai kebutuhan sendiri.</div>
-
-    <div class="card-wide-inner">
-      <div>
-        <p style="font-family:'Special Elite',monospace; font-size:0.68rem; letter-spacing:0.12em; color:var(--gold); text-transform:uppercase; margin-bottom:0.6rem;">Yang ada di dalamnya</p>
-        <ul class="feature-list">
-          <li>Information Script</li>
-          <li>UI simpel dan rapi</li>
-          <li>Button interactive</li>
-          <li>Free Apikey</li>
-          <li>Mudah dikustomisasi</li>
-          <li>No Enkripsi 100%</li>
-        </ul>
+    <section class="hero-section">
+      <div class="hero-left">
+        <div class="article-label">Berita Utama</div>
+        <h1 class="hero-headline">Artoria Hadir Membawa Solusi Digital Terbaik</h1>
+        <div class="article-divider"></div>
+        <p class="hero-intro">
+          Di tengah pesatnya perkembangan teknologi, Artoria berdiri sebagai penyedia layanan digital yang menawarkan kemudahan dan kualitas terbaik. Mulai dari bot WhatsApp, panel server, hingga script siap pakai, semua tersedia dengan harga yang sangat bersahabat.
+        </p>
+        <p class="hero-body">
+          Kami percaya bahwa teknologi seharusnya mudah diakses oleh semua kalangan. Dengan pengalaman di bidang pengembangan digital, Artoria hadir untuk menjawab kebutuhan Anda secara cepat, andal, dan terjangkau.
+        </p>
+        <a href="products.html" class="btn-vintage">Lihat Semua Produk</a>
       </div>
 
-      <div class="script-price-box">
-        <div class="script-tier">
-          <div class="tier-label">No Update</div>
-          <div class="tier-price">Rp 20.000</div>
-          <div class="tier-note">Versi tetap, tanpa pembaruan</div>
+      <div class="hero-divider-v"></div>
+
+      <div class="hero-right">
+        <div class="article-label">Layanan Unggulan</div>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-num">I.</div>
+            <div>
+              <strong>Sewa Bot WhatsApp</strong>
+              <p>Bot WhatsApp siap pakai dengan fitur lengkap. Mulai dari Rp 3.000 per hari.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-num">II.</div>
+            <div>
+              <strong>Panel Pterodactyl</strong>
+              <p>Hosting panel server yang stabil dan handal. Pilihan RAM dari 1GB hingga Unlimited.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-num">III.</div>
+            <div>
+              <strong>Script Bot Neko-Arc</strong>
+              <p>Script bot WhatsApp berkualitas dengan antarmuka rapi dan tanpa enkripsi.</p>
+            </div>
+          </div>
         </div>
-        <div class="script-divider"></div>
-        <div class="script-tier">
-          <div class="tier-label">Full Update</div>
-          <div class="tier-price">Rp 30.000</div>
-          <div class="tier-note">Dapat semua update ke depannya</div>
-        </div>
+        <a href="products.html" class="btn-vintage btn-small">Selengkapnya</a>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- ══ KONTAK ══ -->
-<div class="contact-block fade-section">
-  <h2>Kontak</h2>
-  <p class="sub">Artoria &nbsp;·&nbsp; Siap dihubungi</p>
-  <div class="contact-grid">
-    <div class="contact-item">
-      <span class="label">WhatsApp</span>
-      <a class="value" href="https://wa.me/6285706606594" target="_blank" rel="noopener">085706606594</a>
+    <!-- DIVIDER -->
+    <div class="section-divider">
+      <span>* * *</span>
     </div>
-    <div class="contact-item">
-      <span class="label">GitHub</span>
-      <a class="value" href="https://github.com/Mirai-Kanade" target="_blank" rel="noopener">Mirai-Kanade</a>
-    </div>
-    <div class="contact-item">
-      <span class="label">Instagram</span>
-      <a class="value" href="https://instagram.com/kersenify666" target="_blank" rel="noopener">kersenify666</a>
-    </div>
-    <div class="contact-item">
-      <span class="label">Telegram</span>
-      <a class="value" href="https://t.me/jinkasei" target="_blank" rel="noopener">@jinkasei</a>
-    </div>
-    <div class="contact-item">
-      <span class="label">Gmail</span>
-      <a class="value" href="mailto:halfyzodiac@gmail.com">halfyzodiac@gmail.com</a>
-    </div>
-  </div>
-</div>
 
-  <footer class="footer">
-    <p style="margin-top:2rem;">The Digital Gazette &nbsp;·&nbsp; Artoria Store &nbsp;·&nbsp; 2025</p>
+    <!-- PRODUCT PREVIEW CARDS -->
+    <section class="preview-section">
+      <div class="section-title">
+        <span class="section-rule"></span>
+        <h2>Katalog Produk</h2>
+        <span class="section-rule"></span>
+      </div>
+
+      <div class="card-grid">
+
+        <div class="product-card">
+          <div class="card-tag">Sewa</div>
+          <h3 class="card-title">Bot WhatsApp</h3>
+          <div class="card-rule"></div>
+          <p class="card-desc">Bot siap pakai untuk keperluan pribadi maupun bisnis. Paket harian, mingguan, hingga bulanan tersedia.</p>
+          <div class="card-price">Mulai Rp 3.000 / hari</div>
+          <a href="products.html#bot" class="card-link">Lihat Detail &rarr;</a>
+        </div>
+
+        <div class="product-card featured">
+          <div class="card-tag">Server</div>
+          <h3 class="card-title">Panel Pterodactyl</h3>
+          <div class="card-rule"></div>
+          <p class="card-desc">Panel hosting server modern berbasis Pterodactyl. Tersedia berbagai pilihan RAM sesuai kebutuhan proyek Anda.</p>
+          <div class="card-price">Mulai Rp 2.000 / 1GB</div>
+          <a href="products.html#panel" class="card-link">Lihat Detail &rarr;</a>
+        </div>
+
+        <div class="product-card">
+          <div class="card-tag">Script</div>
+          <h3 class="card-title">Neko-Arc Bot</h3>
+          <div class="card-rule"></div>
+          <p class="card-desc">Script bot WhatsApp dengan UI elegan, tombol interaktif, API key gratis, dan tanpa enkripsi. Mudah dikustomisasi.</p>
+          <div class="card-price">Mulai Rp 20.000</div>
+          <a href="products.html#script" class="card-link">Lihat Detail &rarr;</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="section-divider">
+      <span>* * *</span>
+    </div>
+
+    <!-- ABOUT STRIP -->
+    <section class="about-strip">
+      <div class="about-text">
+        <div class="article-label">Tentang Kami</div>
+        <h2>Mengapa Memilih Artoria?</h2>
+        <p>
+          Artoria bukan sekadar penjual layanan digital. Kami adalah mitra yang memahami kebutuhan teknis Anda. Setiap produk yang kami tawarkan telah melalui proses seleksi ketat untuk memastikan kualitas dan keandalan yang konsisten.
+        </p>
+        <p>
+          Dengan dukungan teknis yang responsif dan harga yang bersahabat, Artoria menjadi pilihan utama bagi mereka yang menginginkan layanan digital berkelas tanpa harus merogoh kocek dalam.
+        </p>
+        <a href="contact.html" class="btn-vintage">Hubungi Kami</a>
+      </div>
+      <div class="about-quote">
+        <blockquote>
+          "Teknologi terbaik adalah yang bisa diakses oleh semua orang."
+          <cite>Artoria</cite>
+        </blockquote>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">Artoria</div>
+      <div class="footer-slogan">Your Highness</div>
+      <div class="footer-links">
+        <a href="index.html">Beranda</a>
+        <span>|</span>
+        <a href="products.html">Produk</a>
+        <span>|</span>
+        <a href="contact.html">Kontak</a>
+      </div>
+      <div class="footer-note">Seluruh hak cipta dilindungi. Artoria &copy; 2026</div>
+    </div>
   </footer>
 
-</div>
 </body>
 </html>
