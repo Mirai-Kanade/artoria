@@ -4,184 +4,1140 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Artoria - Your Highness</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Special+Elite&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=UnifrakturMaguntia&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:       #1A0F08;
+      --paper:     #F2E8D5;
+      --mid:       #D4C5A9;
+      --rust:      #8B6914;
+      --rust-lt:   #B8903A;
+      --cream-dk:  #C9B89A;
+      --border:    2px solid #1A0F08;
+      --border-th: 4px solid #1A0F08;
+      --ff-head:   'Playfair Display', Georgia, serif;
+      --ff-body:   'Courier Prime', 'Courier New', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: var(--ff-body);
+      font-size: 15px;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* ===== NOISE TEXTURE OVERLAY ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ===== NAVIGATION ===== */
+    .nav-top {
+      border-bottom: var(--border);
+      background: var(--paper);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-top-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      height: 48px;
+    }
+
+    .nav-date {
+      font-family: var(--ff-body);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--rust);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0;
+      list-style: none;
+    }
+
+    .nav-links li a {
+      display: block;
+      padding: 0 18px;
+      height: 48px;
+      line-height: 48px;
+      font-family: var(--ff-body);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink);
+      border-left: 1px solid var(--ink);
+      transition: background 0.2s, color 0.2s;
+      position: relative;
+    }
+
+    .nav-links li a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: var(--rust);
+      transition: width 0.25s ease;
+    }
+
+    .nav-links li a:hover { background: var(--ink); color: var(--paper); }
+    .nav-links li a:hover::after { width: 100%; }
+    .nav-links li:last-child a { border-right: 1px solid var(--ink); }
+
+    .nav-contact {
+      font-family: var(--ff-body);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ===== MASTHEAD ===== */
+    .masthead {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px 24px 0;
+      text-align: center;
+    }
+
+    .masthead-rule-top {
+      border-top: 6px double var(--ink);
+      border-bottom: 2px solid var(--ink);
+      height: 10px;
+      margin-bottom: 24px;
+    }
+
+    .masthead-eyebrow {
+      font-family: var(--ff-body);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 8px;
+    }
+
+    .masthead-title {
+      font-family: 'UnifrakturMaguntia', var(--ff-head);
+      font-size: clamp(52px, 9vw, 108px);
+      line-height: 1;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+      text-shadow: 2px 2px 0 rgba(139,105,20,0.15);
+      margin-bottom: 6px;
+    }
+
+    .masthead-slogan {
+      font-family: var(--ff-head);
+      font-style: italic;
+      font-size: clamp(14px, 2.5vw, 20px);
+      letter-spacing: 0.12em;
+      color: var(--rust);
+      margin-bottom: 20px;
+    }
+
+    .masthead-rule-bottom {
+      border-top: 2px solid var(--ink);
+      border-bottom: 6px double var(--ink);
+      height: 10px;
+    }
+
+    /* ===== TORN EDGE DIVIDER ===== */
+    .torn-divider {
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      margin: 0;
+    }
+
+    .torn-divider svg {
+      display: block;
+      width: 100%;
+    }
+
+    /* ===== PAGE SECTIONS ===== */
+    .page-section {
+      display: none;
+    }
+
+    .page-section.active {
+      display: block;
+    }
+
+    /* ===== HERO STRIP ===== */
+    .hero-strip {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 24px 0;
+      display: grid;
+      grid-template-columns: 1fr 2px 2fr 2px 1fr;
+      gap: 0;
+    }
+
+    .hero-col { padding: 0 24px; }
+    .hero-divider { background: var(--ink); }
+
+    .hero-tag {
+      display: inline-block;
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--ff-body);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      margin-bottom: 10px;
+    }
+
+    .hero-col h2 {
+      font-family: var(--ff-head);
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-col p {
+      font-size: 12.5px;
+      line-height: 1.7;
+      color: #3a2a1a;
+    }
+
+    .hero-main h1 {
+      font-family: var(--ff-head);
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 14px;
+      border-bottom: 3px solid var(--ink);
+      padding-bottom: 14px;
+    }
+
+    .hero-main p {
+      font-size: 13.5px;
+      line-height: 1.75;
+      color: #3a2a1a;
+    }
+
+    /* ===== MAIN CONTENT WRAPPER ===== */
+    .main-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 24px 60px;
+    }
+
+    /* ===== SECTION HEADER ===== */
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      border-top: var(--border-th);
+      border-bottom: var(--border);
+      padding: 10px 0;
+      margin-bottom: 28px;
+    }
+
+    .section-header h2 {
+      font-family: var(--ff-head);
+      font-size: clamp(22px, 4vw, 36px);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      flex-shrink: 0;
+    }
+
+    .section-header .rule-fill {
+      flex: 1;
+      height: 1px;
+      background: var(--ink);
+      opacity: 0.4;
+    }
+
+    .section-header .section-num {
+      font-family: var(--ff-body);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--rust);
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    /* ===== PRODUCT GRID ===== */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 0;
+      border-top: var(--border);
+      border-left: var(--border);
+    }
+
+    .product-card {
+      border-right: var(--border);
+      border-bottom: var(--border);
+      padding: 24px;
+      position: relative;
+      background: var(--paper);
+      transition: background 0.2s;
+      overflow: hidden;
+    }
+
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--rust);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover { background: #EEE0C5; }
+    .product-card:hover::before { transform: scaleX(1); }
+
+    .product-card-label {
+      display: inline-block;
+      background: var(--rust);
+      color: var(--paper);
+      font-family: var(--ff-body);
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      margin-bottom: 10px;
+    }
+
+    .product-card h3 {
+      font-family: var(--ff-head);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 10px;
+    }
+
+    .price-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+    }
+
+    .price-table td {
+      padding: 5px 0;
+      font-size: 13px;
+      border-bottom: 1px dashed var(--cream-dk);
+    }
+
+    .price-table td:last-child {
+      text-align: right;
+      font-weight: 700;
+      font-family: var(--ff-head);
+      font-size: 14px;
+    }
+
+    .price-table .pt-group-label td {
+      padding-top: 10px;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--rust);
+      border-bottom: none;
+      font-weight: 700;
+    }
+
+    /* ===== FEATURE LIST ===== */
+    .feature-list {
+      list-style: none;
+      margin-bottom: 18px;
+    }
+
+    .feature-list li {
+      font-size: 12.5px;
+      padding: 4px 0;
+      border-bottom: 1px dashed var(--cream-dk);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .feature-list li::before {
+      content: '+';
+      color: var(--rust);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ===== CTA BUTTON ===== */
+    .btn-order {
+      display: inline-block;
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--ff-body);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 10px 20px;
+      border: 2px solid var(--ink);
+      position: relative;
+      overflow: hidden;
+      transition: color 0.25s;
+    }
+
+    .btn-order::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--rust);
+      transform: translateX(-101%);
+      transition: transform 0.25s ease;
+      z-index: 0;
+    }
+
+    .btn-order:hover { color: var(--paper); border-color: var(--rust); }
+    .btn-order:hover::after { transform: translateX(0); }
+    .btn-order span { position: relative; z-index: 1; }
+
+    .btn-order:active {
+      transform: scale(0.97);
+    }
+
+    /* ===== PRICE BADGE ===== */
+    .price-badge {
+      display: inline-block;
+      border: 2px solid var(--rust);
+      padding: 4px 12px;
+      margin-top: 8px;
+      margin-bottom: 14px;
+    }
+
+    .price-badge .from { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rust); }
+    .price-badge .amount { font-family: var(--ff-head); font-size: 26px; font-weight: 900; line-height: 1; }
+    .price-badge .unit { font-size: 11px; color: #5a4a3a; }
+
+    /* ===== CONTACT PAGE ===== */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0;
+      border-top: var(--border);
+      border-left: var(--border);
+      margin-bottom: 40px;
+    }
+
+    .contact-card {
+      border-right: var(--border);
+      border-bottom: var(--border);
+      padding: 20px;
+      text-decoration: none;
+      color: var(--ink);
+      background: var(--paper);
+      position: relative;
+      overflow: hidden;
+      display: block;
+      transition: background 0.2s;
+    }
+
+    .contact-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--rust);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .contact-card:hover { background: #EEE0C5; }
+    .contact-card:hover::after { transform: scaleX(1); }
+
+    .contact-card-platform {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 6px;
+    }
+
+    .contact-card-value {
+      font-family: var(--ff-head);
+      font-size: 15px;
+      font-weight: 700;
+      word-break: break-all;
+    }
+
+    .contact-card-cta {
+      margin-top: 10px;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    /* ===== ABOUT BLOCK ===== */
+    .about-block {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 32px;
+      border-top: var(--border-th);
+      border-bottom: var(--border);
+      padding: 28px 0;
+    }
+
+    .about-block h2 {
+      font-family: var(--ff-head);
+      font-size: clamp(26px, 5vw, 48px);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .about-block p {
+      font-size: 13.5px;
+      line-height: 1.75;
+      color: #3a2a1a;
+      margin-bottom: 12px;
+    }
+
+    .about-sidebar {
+      border-left: var(--border);
+      padding-left: 28px;
+    }
+
+    .aside-label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 8px;
+    }
+
+    .aside-list {
+      list-style: none;
+    }
+
+    .aside-list li {
+      font-size: 12px;
+      padding: 6px 0;
+      border-bottom: 1px dashed var(--cream-dk);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--ink);
+      color: var(--mid);
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-brand {
+      font-family: 'UnifrakturMaguntia', var(--ff-head);
+      font-size: 28px;
+      color: var(--paper);
+    }
+
+    .footer-copy {
+      font-family: var(--ff-body);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-align: right;
+      color: var(--cream-dk);
+    }
+
+    /* ===== RUNNING TICKER ===== */
+    .ticker-wrap {
+      background: var(--ink);
+      overflow: hidden;
+      border-top: 2px solid var(--rust);
+      border-bottom: 2px solid var(--rust);
+      height: 30px;
+      display: flex;
+      align-items: center;
+    }
+
+    .ticker-label {
+      background: var(--rust);
+      color: var(--paper);
+      font-family: var(--ff-body);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0 14px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      z-index: 1;
+    }
+
+    .ticker-track {
+      display: flex;
+      white-space: nowrap;
+      animation: ticker 28s linear infinite;
+    }
+
+    .ticker-track span {
+      font-family: var(--ff-body);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--mid);
+      padding: 0 48px;
+    }
+
+    .ticker-track span strong {
+      color: var(--rust-lt);
+    }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ===== HIGHLIGHT BOX ===== */
+    .highlight-box {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 20px 24px;
+      margin: 24px 0;
+    }
+
+    .highlight-box p {
+      font-family: var(--ff-head);
+      font-style: italic;
+      font-size: clamp(16px, 3vw, 24px);
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    /* ===== STAMP ELEMENT ===== */
+    .stamp {
+      display: inline-block;
+      border: 3px solid var(--rust);
+      padding: 6px 14px;
+      font-family: var(--ff-body);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--rust);
+      transform: rotate(-2deg);
+      opacity: 0.85;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .stamp:hover { opacity: 1; transform: rotate(0deg); }
+
+    /* ===== COLUMNS TEXT ===== */
+    .columns-2 {
+      column-count: 2;
+      column-gap: 40px;
+      column-rule: 1px solid var(--cream-dk);
+      font-size: 13px;
+      line-height: 1.75;
+      color: #3a2a1a;
+    }
+
+    /* ===== PRODUCT PILL (home featured) ===== */
+    .featured-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border-top: var(--border);
+      border-left: var(--border);
+      margin-top: 32px;
+    }
+
+    .featured-item {
+      border-right: var(--border);
+      border-bottom: var(--border);
+      padding: 20px;
+      text-decoration: none;
+      color: var(--ink);
+      display: block;
+      background: var(--paper);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .featured-item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--ink);
+      transform: translateY(101%);
+      transition: transform 0.28s ease;
+      z-index: 0;
+    }
+
+    .featured-item:hover { transform: none; }
+    .featured-item:hover::before { transform: translateY(0); }
+
+    .featured-item * { position: relative; z-index: 1; }
+
+    .featured-item:hover .fi-num,
+    .featured-item:hover .fi-name,
+    .featured-item:hover .fi-from,
+    .featured-item:hover .fi-price { color: var(--paper); }
+
+    .featured-item:hover .fi-rule { border-color: var(--mid); }
+
+    .fi-num {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 8px;
+      transition: color 0.2s;
+    }
+
+    .fi-name {
+      font-family: var(--ff-head);
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 10px;
+      transition: color 0.2s;
+    }
+
+    .fi-rule {
+      border-top: 1px solid var(--ink);
+      margin: 10px 0;
+      transition: border-color 0.2s;
+    }
+
+    .fi-from {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.6;
+      transition: color 0.2s;
+    }
+
+    .fi-price {
+      font-family: var(--ff-head);
+      font-size: 22px;
+      font-weight: 900;
+      transition: color 0.2s;
+    }
+
+    /* ===== ANNOUNCEMENT BAR ===== */
+    .annc-bar {
+      background: var(--rust);
+      color: var(--paper);
+      text-align: center;
+      padding: 8px 24px;
+      font-family: var(--ff-body);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .hero-strip { grid-template-columns: 1fr; }
+      .hero-divider { display: none; }
+      .hero-col { padding: 12px 0; border-bottom: 1px solid var(--ink); }
+      .hero-main { order: -1; }
+
+      .about-block { grid-template-columns: 1fr; }
+      .about-sidebar { border-left: none; border-top: var(--border); padding-left: 0; padding-top: 20px; }
+
+      .featured-row { grid-template-columns: 1fr; }
+      .columns-2 { column-count: 1; }
+
+      .nav-contact { display: none; }
+      .nav-links li a { padding: 0 10px; font-size: 10px; }
+    }
+
+    @media (max-width: 520px) {
+      .nav-links li a { padding: 0 8px; font-size: 9px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ===== PRINT MARKS ===== */
+    .print-corner {
+      position: absolute;
+      font-size: 9px;
+      color: var(--rust);
+      font-family: var(--ff-body);
+      letter-spacing: 0.1em;
+      opacity: 0.5;
+    }
+
+    .product-card { position: relative; }
+
+    /* ===== PAGE TRANSITIONS ===== */
+    .page-section {
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== SCROLL HINT ===== */
+    .scroll-hint {
+      text-align: center;
+      padding: 20px;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--rust);
+      opacity: 0.7;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- PAPER TEXTURE OVERLAY -->
-  <div class="paper-overlay"></div>
+<!-- ANNOUNCEMENT BAR -->
+<div class="annc-bar">
+  Open for order — hubungi via WhatsApp atau Telegram untuk pemesanan
+</div>
 
-  <!-- TOP BANNER -->
-  <div class="top-banner">
-    <span>Edisi Terbatas &nbsp;|&nbsp; Harga Terjangkau &nbsp;|&nbsp; Layanan Terpercaya</span>
+<!-- TOP NAV -->
+<nav class="nav-top">
+  <div class="nav-top-inner">
+    <span class="nav-date">Est. 2024 &nbsp;/&nbsp; Artoria Shop</span>
+    <ul class="nav-links">
+      <li><a href="#" onclick="showPage('home'); return false;"><span>Beranda</span></a></li>
+      <li><a href="#" onclick="showPage('products'); return false;"><span>Produk</span></a></li>
+      <li><a href="#" onclick="showPage('contact'); return false;"><span>Kontak</span></a></li>
+    </ul>
+    <span class="nav-contact">WA: 085706606594</span>
+  </div>
+</nav>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-rule-top"></div>
+  <p class="masthead-eyebrow">Vol. I &nbsp;&nbsp; Edisi Digital &nbsp;&nbsp; artoria.dev</p>
+  <h1 class="masthead-title">Artoria</h1>
+  <p class="masthead-slogan">Your Highness</p>
+  <div class="masthead-rule-bottom"></div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-label">Terbaru</div>
+  <div class="ticker-track">
+    <span>Bot WhatsApp &mdash; Sewa mulai <strong>3k/hari</strong></span>
+    <span>Panel Pterodactyl &mdash; Dari <strong>2k</strong> hingga Admin Panel</span>
+    <span>Script Neko-Arc &mdash; Full update hanya <strong>30k</strong></span>
+    <span>Hubungi kami via <strong>Telegram @jinkasei</strong></span>
+    <span>Bot WhatsApp &mdash; Sewa mulai <strong>3k/hari</strong></span>
+    <span>Panel Pterodactyl &mdash; Dari <strong>2k</strong> hingga Admin Panel</span>
+    <span>Script Neko-Arc &mdash; Full update hanya <strong>30k</strong></span>
+    <span>Hubungi kami via <strong>Telegram @jinkasei</strong></span>
+  </div>
+</div>
+
+<!-- ===================== -->
+<!-- PAGE: HOME            -->
+<!-- ===================== -->
+<div id="page-home" class="page-section active">
+  <div class="hero-strip">
+    <div class="hero-col">
+      <div class="hero-tag">Layanan</div>
+      <h2>Apa yang Kami Tawarkan</h2>
+      <p>Dari bot WhatsApp siap pakai hingga panel hosting dan script custom, semua tersedia dengan harga yang masuk akal.</p>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-col hero-main">
+      <h1>Tools Digital untuk Kebutuhan Anda</h1>
+      <p>Artoria menyediakan layanan sewa bot, panel server, dan script bot WhatsApp yang siap digunakan maupun dikustomisasi. Cocok untuk personal maupun kebutuhan bisnis kecil.</p>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-col">
+      <div class="hero-tag">Info</div>
+      <h2>Cara Order</h2>
+      <p>Pilih produk yang diinginkan, lalu hubungi via WhatsApp atau Telegram. Pembayaran dan pengiriman dikonfirmasi langsung.</p>
+    </div>
   </div>
 
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="header-date">
-      <span id="current-date">Minggu, 07 Juni 2026</span>
-    </div>
-    <div class="header-brand">
-      <div class="brand-gothic">Artoria</div>
-      <div class="brand-rule"></div>
-      <div class="brand-slogan">Your Highness &mdash; Artoria</div>
-      <div class="brand-rule"></div>
-      <div class="brand-tagline">Solusi Digital Berkelas untuk Kebutuhan Anda</div>
-    </div>
-    <div class="header-edition">
-      <span>Vol. I, No. 1</span><br />
-      <span>Harga: Gratis</span>
-    </div>
-  </header>
+  <div class="main-wrapper">
 
-  <!-- NAVIGATION -->
-  <nav class="main-nav">
-    <ul>
-      <li><a href="index.html" class="active">Beranda</a></li>
-      <li><a href="products.html">Produk</a></li>
-      <li><a href="contact.html">Kontak</a></li>
-    </ul>
-  </nav>
+    <div class="section-header">
+      <h2>Produk Unggulan</h2>
+      <div class="rule-fill"></div>
+      <span class="section-num">3 Kategori</span>
+    </div>
 
-  <!-- HERO SECTION -->
-  <main class="container">
-
-    <section class="hero-section">
-      <div class="hero-left">
-        <div class="article-label">Berita Utama</div>
-        <h1 class="hero-headline">Artoria Hadir Membawa Solusi Digital Terbaik</h1>
-        <div class="article-divider"></div>
-        <p class="hero-intro">
-          Di tengah pesatnya perkembangan teknologi, Artoria berdiri sebagai penyedia layanan digital yang menawarkan kemudahan dan kualitas terbaik. Mulai dari bot WhatsApp, panel server, hingga script siap pakai, semua tersedia dengan harga yang sangat bersahabat.
-        </p>
-        <p class="hero-body">
-          Kami percaya bahwa teknologi seharusnya mudah diakses oleh semua kalangan. Dengan pengalaman di bidang pengembangan digital, Artoria hadir untuk menjawab kebutuhan Anda secara cepat, andal, dan terjangkau.
-        </p>
-        <a href="products.html" class="btn-vintage">Lihat Semua Produk</a>
+    <div class="featured-row">
+      <div class="featured-item" onclick="showPage('products')">
+        <div class="fi-num">Layanan 01</div>
+        <div class="fi-name">Sewa Bot WhatsApp</div>
+        <div class="fi-rule"></div>
+        <div class="fi-from">Mulai dari</div>
+        <div class="fi-price">Rp 3.000</div>
       </div>
+      <div class="featured-item" onclick="showPage('products')">
+        <div class="fi-num">Layanan 02</div>
+        <div class="fi-name">Panel Pterodactyl</div>
+        <div class="fi-rule"></div>
+        <div class="fi-from">Mulai dari</div>
+        <div class="fi-price">Rp 2.000</div>
+      </div>
+      <div class="featured-item" onclick="showPage('products')">
+        <div class="fi-num">Layanan 03</div>
+        <div class="fi-name">Script Neko-Arc</div>
+        <div class="fi-rule"></div>
+        <div class="fi-from">Mulai dari</div>
+        <div class="fi-price">Rp 20.000</div>
+      </div>
+    </div>
 
-      <div class="hero-divider-v"></div>
+    <div class="highlight-box" style="margin-top: 36px;">
+      <p>"Layanan terjangkau, produk fungsional, dan dukungan langsung dari pemilik."</p>
+    </div>
 
-      <div class="hero-right">
-        <div class="article-label">Layanan Unggulan</div>
-        <div class="feature-list">
-          <div class="feature-item">
-            <div class="feature-num">I.</div>
-            <div>
-              <strong>Sewa Bot WhatsApp</strong>
-              <p>Bot WhatsApp siap pakai dengan fitur lengkap. Mulai dari Rp 3.000 per hari.</p>
-            </div>
-          </div>
-          <div class="feature-item">
-            <div class="feature-num">II.</div>
-            <div>
-              <strong>Panel Pterodactyl</strong>
-              <p>Hosting panel server yang stabil dan handal. Pilihan RAM dari 1GB hingga Unlimited.</p>
-            </div>
-          </div>
-          <div class="feature-item">
-            <div class="feature-num">III.</div>
-            <div>
-              <strong>Script Bot Neko-Arc</strong>
-              <p>Script bot WhatsApp berkualitas dengan antarmuka rapi dan tanpa enkripsi.</p>
-            </div>
-          </div>
+    <div class="about-block" style="margin-top: 36px;">
+      <div>
+        <h2>Artoria, Siapa Kami</h2>
+        <div class="columns-2">
+          <p>Artoria adalah toko digital kecil yang dikelola secara personal, fokus pada layanan berbasis teknologi WhatsApp dan hosting ringan. Kami tidak menjual janji besar, hanya produk yang benar-benar bisa digunakan.</p>
+          <p>Setiap pesanan ditangani langsung oleh pemilik, sehingga komunikasi lebih cepat dan responsif. Tidak ada agen perantara, tidak ada waktu tunggu panjang.</p>
         </div>
-        <a href="products.html" class="btn-vintage btn-small">Selengkapnya</a>
       </div>
-    </section>
-
-    <!-- DIVIDER -->
-    <div class="section-divider">
-      <span>* * *</span>
+      <div class="about-sidebar">
+        <div class="aside-label">Platform Kontak</div>
+        <ul class="aside-list">
+          <li>WhatsApp</li>
+          <li>Telegram</li>
+          <li>Instagram</li>
+          <li>Github</li>
+          <li>Gmail</li>
+        </ul>
+        <br>
+        <div class="stamp">Open Order</div>
+      </div>
     </div>
 
-    <!-- PRODUCT PREVIEW CARDS -->
-    <section class="preview-section">
-      <div class="section-title">
-        <span class="section-rule"></span>
-        <h2>Katalog Produk</h2>
-        <span class="section-rule"></span>
-      </div>
+  </div>
+</div>
 
-      <div class="card-grid">
+<!-- ===================== -->
+<!-- PAGE: PRODUCTS        -->
+<!-- ===================== -->
+<div id="page-products" class="page-section">
+  <div class="main-wrapper">
 
-        <div class="product-card">
-          <div class="card-tag">Sewa</div>
-          <h3 class="card-title">Bot WhatsApp</h3>
-          <div class="card-rule"></div>
-          <p class="card-desc">Bot siap pakai untuk keperluan pribadi maupun bisnis. Paket harian, mingguan, hingga bulanan tersedia.</p>
-          <div class="card-price">Mulai Rp 3.000 / hari</div>
-          <a href="products.html#bot" class="card-link">Lihat Detail &rarr;</a>
-        </div>
-
-        <div class="product-card featured">
-          <div class="card-tag">Server</div>
-          <h3 class="card-title">Panel Pterodactyl</h3>
-          <div class="card-rule"></div>
-          <p class="card-desc">Panel hosting server modern berbasis Pterodactyl. Tersedia berbagai pilihan RAM sesuai kebutuhan proyek Anda.</p>
-          <div class="card-price">Mulai Rp 2.000 / 1GB</div>
-          <a href="products.html#panel" class="card-link">Lihat Detail &rarr;</a>
-        </div>
-
-        <div class="product-card">
-          <div class="card-tag">Script</div>
-          <h3 class="card-title">Neko-Arc Bot</h3>
-          <div class="card-rule"></div>
-          <p class="card-desc">Script bot WhatsApp dengan UI elegan, tombol interaktif, API key gratis, dan tanpa enkripsi. Mudah dikustomisasi.</p>
-          <div class="card-price">Mulai Rp 20.000</div>
-          <a href="products.html#script" class="card-link">Lihat Detail &rarr;</a>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- DIVIDER -->
-    <div class="section-divider">
-      <span>* * *</span>
+    <div class="section-header">
+      <h2>Daftar Produk</h2>
+      <div class="rule-fill"></div>
+      <span class="section-num">Katalog Lengkap</span>
     </div>
 
-    <!-- ABOUT STRIP -->
-    <section class="about-strip">
-      <div class="about-text">
-        <div class="article-label">Tentang Kami</div>
-        <h2>Mengapa Memilih Artoria?</h2>
-        <p>
-          Artoria bukan sekadar penjual layanan digital. Kami adalah mitra yang memahami kebutuhan teknis Anda. Setiap produk yang kami tawarkan telah melalui proses seleksi ketat untuk memastikan kualitas dan keandalan yang konsisten.
-        </p>
-        <p>
-          Dengan dukungan teknis yang responsif dan harga yang bersahabat, Artoria menjadi pilihan utama bagi mereka yang menginginkan layanan digital berkelas tanpa harus merogoh kocek dalam.
-        </p>
-        <a href="contact.html" class="btn-vintage">Hubungi Kami</a>
-      </div>
-      <div class="about-quote">
-        <blockquote>
-          "Teknologi terbaik adalah yang bisa diakses oleh semua orang."
-          <cite>Artoria</cite>
-        </blockquote>
-      </div>
-    </section>
+    <div class="product-grid">
 
-  </main>
+      <!-- PRODUCT 1: BOT WA -->
+      <div class="product-card">
+        <div class="product-card-label">Sewa</div>
+        <h3>Bot WhatsApp</h3>
+        <p style="font-size:12px; margin-bottom:14px; color:#5a4a3a;">Bot siap pakai, aktif selama masa sewa, cocok untuk personal maupun komunitas.</p>
 
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-brand">Artoria</div>
-      <div class="footer-slogan">Your Highness</div>
-      <div class="footer-links">
-        <a href="index.html">Beranda</a>
-        <span>|</span>
-        <a href="products.html">Produk</a>
-        <span>|</span>
-        <a href="contact.html">Kontak</a>
+        <table class="price-table">
+          <tr class="pt-group-label"><td colspan="2">List Sewa</td></tr>
+          <tr><td>Per Hari</td><td>Rp 3.000</td></tr>
+          <tr><td>Per Minggu</td><td>Rp 8.000</td></tr>
+          <tr><td>Per Bulan</td><td>Rp 13.000</td></tr>
+          <tr class="pt-group-label"><td colspan="2">Premium User</td></tr>
+          <tr><td>Per Minggu</td><td>Rp 5.000</td></tr>
+          <tr><td>Per Bulan</td><td>Rp 10.000</td></tr>
+        </table>
+
+        <a href="https://wa.me/6285706606594?text=Halo,%20saya%20mau%20order%20Sewa%20Bot%20WhatsApp" class="btn-order" target="_blank"><span>Order via WhatsApp</span></a>
       </div>
-      <div class="footer-note">Seluruh hak cipta dilindungi. Artoria &copy; 2026</div>
+
+      <!-- PRODUCT 2: PANEL -->
+      <div class="product-card">
+        <div class="product-card-label">Panel</div>
+        <h3>Panel Pterodactyl</h3>
+        <p style="font-size:12px; margin-bottom:14px; color:#5a4a3a;">Slot server dengan berbagai kapasitas RAM. Ideal untuk menjalankan bot atau aplikasi ringan.</p>
+
+        <table class="price-table">
+          <tr class="pt-group-label"><td colspan="2">Pilihan RAM</td></tr>
+          <tr><td>1 GB</td><td>Rp 2.000</td></tr>
+          <tr><td>2 GB</td><td>Rp 4.000</td></tr>
+          <tr><td>3 GB</td><td>Rp 6.000</td></tr>
+          <tr><td>4 GB</td><td>Rp 8.000</td></tr>
+          <tr><td>5 GB</td><td>Rp 10.000</td></tr>
+          <tr><td>Unlimited</td><td>Rp 12.000</td></tr>
+          <tr class="pt-group-label"><td colspan="2">Akses Khusus</td></tr>
+          <tr><td>Reseller</td><td>Rp 15.000</td></tr>
+          <tr><td>Admin Panel</td><td>Rp 25.000</td></tr>
+        </table>
+
+        <a href="https://wa.me/6285706606594?text=Halo,%20saya%20mau%20order%20Panel%20Pterodactyl" class="btn-order" target="_blank"><span>Order via WhatsApp</span></a>
+      </div>
+
+      <!-- PRODUCT 3: SCRIPT -->
+      <div class="product-card">
+        <div class="product-card-label">Script</div>
+        <h3>Script Neko-Arc</h3>
+        <p style="font-size:12px; margin-bottom:14px; color:#5a4a3a;">Script bot WhatsApp custom dengan tampilan bersih dan fitur yang bisa langsung dipakai.</p>
+
+        <ul class="feature-list">
+          <li>UI sederhana dan rapi</li>
+          <li>Tombol interaktif</li>
+          <li>API key gratis</li>
+          <li>Mudah dikustomisasi</li>
+          <li>Tanpa enkripsi (open source)</li>
+        </ul>
+
+        <div class="price-badge">
+          <div class="from">Tanpa Update</div>
+          <div class="amount">20k</div>
+          <div class="unit">sekali bayar</div>
+        </div>
+        <br>
+        <div class="price-badge">
+          <div class="from">Full Update</div>
+          <div class="amount">30k</div>
+          <div class="unit">update selamanya</div>
+        </div>
+        <br><br>
+        <a href="https://wa.me/6285706606594?text=Halo,%20saya%20mau%20order%20Script%20Neko-Arc" class="btn-order" target="_blank"><span>Order via WhatsApp</span></a>
+      </div>
+
     </div>
-  </footer>
+
+    <div class="highlight-box" style="margin-top: 32px;">
+      <p>"Semua harga sudah final. Tidak ada biaya tambahan tersembunyi."</p>
+    </div>
+
+    <div style="margin-top: 28px; padding: 20px; border: var(--border);">
+      <p style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rust); margin-bottom: 8px;">Catatan Pemesanan</p>
+      <p style="font-size: 13px; line-height: 1.7; color: #3a2a1a;">Pembayaran dikonfirmasi terlebih dahulu sebelum produk dikirim. Untuk pertanyaan teknis atau negosiasi paket, silakan hubungi langsung via Telegram atau WhatsApp.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== -->
+<!-- PAGE: CONTACT         -->
+<!-- ===================== -->
+<div id="page-contact" class="page-section">
+  <div class="main-wrapper">
+
+    <div class="section-header">
+      <h2>Hubungi Kami</h2>
+      <div class="rule-fill"></div>
+      <span class="section-num">5 Platform</span>
+    </div>
+
+    <p style="font-size: 13.5px; line-height: 1.75; margin-bottom: 28px; color: #3a2a1a; max-width: 600px;">
+      Pilih platform yang paling nyaman untuk Anda. Respons paling cepat biasanya melalui WhatsApp atau Telegram.
+    </p>
+
+    <div class="contact-grid">
+      <a href="https://wa.me/6285706606594" target="_blank" class="contact-card">
+        <div class="contact-card-platform">WhatsApp</div>
+        <div class="contact-card-value">085706606594</div>
+        <div class="contact-card-cta">Kirim pesan</div>
+      </a>
+      <a href="https://t.me/jinkasei" target="_blank" class="contact-card">
+        <div class="contact-card-platform">Telegram</div>
+        <div class="contact-card-value">@jinkasei</div>
+        <div class="contact-card-cta">Buka Telegram</div>
+      </a>
+      <a href="https://instagram.com/kersenify666" target="_blank" class="contact-card">
+        <div class="contact-card-platform">Instagram</div>
+        <div class="contact-card-value">@kersenify666</div>
+        <div class="contact-card-cta">Lihat profil</div>
+      </a>
+      <a href="https://github.com/Mirai-Kanade" target="_blank" class="contact-card">
+        <div class="contact-card-platform">Github</div>
+        <div class="contact-card-value">Mirai-Kanade</div>
+        <div class="contact-card-cta">Lihat repository</div>
+      </a>
+      <a href="mailto:halfyzodiac@gmail.com" class="contact-card">
+        <div class="contact-card-platform">Gmail</div>
+        <div class="contact-card-value">halfyzodiac@gmail.com</div>
+        <div class="contact-card-cta">Kirim email</div>
+      </a>
+    </div>
+
+    <div class="about-block">
+      <div>
+        <h2>Jam Operasional</h2>
+        <div class="columns-2">
+          <p>Artoria dikelola secara personal, sehingga respons mungkin tidak selalu instan. Namun kami selalu berusaha membalas dalam 1x24 jam di hari aktif.</p>
+          <p>Untuk keperluan mendesak, Telegram adalah pilihan terbaik. Untuk order standar, WhatsApp sudah lebih dari cukup.</p>
+        </div>
+      </div>
+      <div class="about-sidebar">
+        <div class="aside-label">Status</div>
+        <ul class="aside-list">
+          <li>Order: Terbuka</li>
+          <li>Respons: 1-12 jam</li>
+          <li>Bahasa: Indonesia</li>
+        </ul>
+        <br>
+        <div class="stamp">Aktif</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Artoria</div>
+    <div class="footer-copy">
+      Your Highness<br>
+      halfyzodiac@gmail.com
+    </div>
+  </div>
+</footer>
+
+<script>
+  function showPage(name) {
+    document.querySelectorAll('.page-section').forEach(function(el) {
+      el.classList.remove('active');
+    });
+    var target = document.getElementById('page-' + name);
+    if (target) {
+      target.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+</script>
 
 </body>
 </html>
