@@ -33,7 +33,6 @@
       overflow-x: hidden;
     }
 
-    /* ===== NOISE TEXTURE OVERLAY ===== */
     body::before {
       content: '';
       position: fixed;
@@ -76,6 +75,7 @@
       list-style: none;
     }
 
+    /* NAV BUTTON — typewriter underline */
     .nav-links li a {
       display: block;
       padding: 0 18px;
@@ -88,23 +88,29 @@
       text-decoration: none;
       color: var(--ink);
       border-left: 1px solid var(--ink);
-      transition: background 0.2s, color 0.2s;
       position: relative;
+      overflow: hidden;
+      transition: color 0.22s;
     }
 
-    .nav-links li a::after {
+    .nav-links li a .nav-text {
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav-links li a::before {
       content: '';
       position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 3px;
-      background: var(--rust);
-      transition: width 0.25s ease;
+      bottom: 0; left: 0; right: 0;
+      height: 100%;
+      background: var(--ink);
+      transform: translateY(100%);
+      transition: transform 0.22s cubic-bezier(0.4,0,0.2,1);
+      z-index: 0;
     }
 
-    .nav-links li a:hover { background: var(--ink); color: var(--paper); }
-    .nav-links li a:hover::after { width: 100%; }
+    .nav-links li a:hover { color: var(--paper); }
+    .nav-links li a:hover::before { transform: translateY(0); }
     .nav-links li:last-child a { border-right: 1px solid var(--ink); }
 
     .nav-contact {
@@ -163,26 +169,13 @@
       height: 10px;
     }
 
-    /* ===== TORN EDGE DIVIDER ===== */
-    .torn-divider {
-      width: 100%;
-      overflow: hidden;
-      line-height: 0;
-      margin: 0;
-    }
-
-    .torn-divider svg {
-      display: block;
-      width: 100%;
-    }
-
     /* ===== PAGE SECTIONS ===== */
-    .page-section {
-      display: none;
-    }
+    .page-section { display: none; }
+    .page-section.active { display: block; animation: pgFade 0.35s ease; }
 
-    .page-section.active {
-      display: block;
+    @keyframes pgFade {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     /* ===== HERO STRIP ===== */
@@ -219,11 +212,7 @@
       letter-spacing: 0.05em;
     }
 
-    .hero-col p {
-      font-size: 12.5px;
-      line-height: 1.7;
-      color: #3a2a1a;
-    }
+    .hero-col p { font-size: 12.5px; line-height: 1.7; color: #3a2a1a; }
 
     .hero-main h1 {
       font-family: var(--ff-head);
@@ -235,17 +224,13 @@
       padding-bottom: 14px;
     }
 
-    .hero-main p {
-      font-size: 13.5px;
-      line-height: 1.75;
-      color: #3a2a1a;
-    }
+    .hero-main p { font-size: 13.5px; line-height: 1.75; color: #3a2a1a; }
 
     /* ===== MAIN CONTENT WRAPPER ===== */
     .main-wrapper {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 32px 24px 60px;
+      padding: 32px 24px 80px;
     }
 
     /* ===== SECTION HEADER ===== */
@@ -268,12 +253,7 @@
       flex-shrink: 0;
     }
 
-    .section-header .rule-fill {
-      flex: 1;
-      height: 1px;
-      background: var(--ink);
-      opacity: 0.4;
-    }
+    .section-header .rule-fill { flex: 1; height: 1px; background: var(--ink); opacity: 0.4; }
 
     .section-header .section-num {
       font-family: var(--ff-body);
@@ -339,11 +319,7 @@
       padding-bottom: 10px;
     }
 
-    .price-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 16px;
-    }
+    .price-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
 
     .price-table td {
       padding: 5px 0;
@@ -369,10 +345,7 @@
     }
 
     /* ===== FEATURE LIST ===== */
-    .feature-list {
-      list-style: none;
-      margin-bottom: 18px;
-    }
+    .feature-list { list-style: none; margin-bottom: 18px; }
 
     .feature-list li {
       font-size: 12.5px;
@@ -383,16 +356,30 @@
       gap: 8px;
     }
 
-    .feature-list li::before {
-      content: '+';
-      color: var(--rust);
-      font-weight: 700;
-      flex-shrink: 0;
+    .feature-list li::before { content: '+'; color: var(--rust); font-weight: 700; flex-shrink: 0; }
+
+    /* ===== PRICE BADGE ===== */
+    .price-badge {
+      display: inline-block;
+      border: 2px solid var(--rust);
+      padding: 4px 12px;
+      margin-top: 8px;
+      margin-bottom: 6px;
     }
 
-    /* ===== CTA BUTTON ===== */
+    .price-badge .from { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rust); }
+    .price-badge .amount { font-family: var(--ff-head); font-size: 26px; font-weight: 900; line-height: 1; }
+    .price-badge .unit { font-size: 11px; color: #5a4a3a; }
+
+    /* ===================================
+       BUTTON SYSTEM — SEMUA VARIASI
+    ==================================== */
+
+    /* --- BTN-ORDER: Ink flood dari kiri --- */
     .btn-order {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
       background: var(--ink);
       color: var(--paper);
       font-family: var(--ff-body);
@@ -400,11 +387,13 @@
       letter-spacing: 0.18em;
       text-transform: uppercase;
       text-decoration: none;
-      padding: 10px 20px;
+      padding: 11px 22px;
       border: 2px solid var(--ink);
       position: relative;
       overflow: hidden;
-      transition: color 0.25s;
+      cursor: pointer;
+      transition: color 0.28s, border-color 0.28s;
+      margin-top: 8px;
     }
 
     .btn-order::after {
@@ -413,35 +402,267 @@
       inset: 0;
       background: var(--rust);
       transform: translateX(-101%);
-      transition: transform 0.25s ease;
+      transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
       z-index: 0;
     }
 
-    .btn-order:hover { color: var(--paper); border-color: var(--rust); }
+    .btn-order:hover { border-color: var(--rust); }
     .btn-order:hover::after { transform: translateX(0); }
+    .btn-order:active { transform: scale(0.97); }
     .btn-order span { position: relative; z-index: 1; }
 
-    .btn-order:active {
-      transform: scale(0.97);
-    }
-
-    /* ===== PRICE BADGE ===== */
-    .price-badge {
+    /* arrow tip */
+    .btn-order .btn-arrow {
+      position: relative;
+      z-index: 1;
       display: inline-block;
-      border: 2px solid var(--rust);
-      padding: 4px 12px;
-      margin-top: 8px;
-      margin-bottom: 14px;
+      transition: transform 0.22s;
+      font-style: normal;
     }
 
-    .price-badge .from { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rust); }
-    .price-badge .amount { font-family: var(--ff-head); font-size: 26px; font-weight: 900; line-height: 1; }
-    .price-badge .unit { font-size: 11px; color: #5a4a3a; }
+    .btn-order:hover .btn-arrow { transform: translateX(5px); }
+
+    /* --- BTN-GHOST: Bracket collapse (corner lines converge) --- */
+    .btn-ghost {
+      display: inline-block;
+      font-family: var(--ff-body);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink);
+      padding: 10px 22px;
+      position: relative;
+      cursor: pointer;
+      transition: color 0.25s, background 0.25s;
+      background: transparent;
+      border: none;
+    }
+
+    /* four corner brackets */
+    .btn-ghost::before,
+    .btn-ghost::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      transition: width 0.25s, height 0.25s;
+    }
+
+    .btn-ghost::before {
+      top: 0; left: 0;
+      border-top: 2px solid var(--ink);
+      border-left: 2px solid var(--ink);
+    }
+
+    .btn-ghost::after {
+      bottom: 0; right: 0;
+      border-bottom: 2px solid var(--ink);
+      border-right: 2px solid var(--ink);
+    }
+
+    /* inner corners via wrapper approach using box-shadow */
+    .btn-ghost-wrap {
+      position: relative;
+      display: inline-block;
+    }
+
+    .btn-ghost-wrap .bc-tr,
+    .btn-ghost-wrap .bc-bl {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      pointer-events: none;
+      transition: width 0.25s, height 0.25s;
+    }
+
+    .btn-ghost-wrap .bc-tr {
+      top: 0; right: 0;
+      border-top: 2px solid var(--ink);
+      border-right: 2px solid var(--ink);
+    }
+
+    .btn-ghost-wrap .bc-bl {
+      bottom: 0; left: 0;
+      border-bottom: 2px solid var(--ink);
+      border-left: 2px solid var(--ink);
+    }
+
+    .btn-ghost-wrap:hover .btn-ghost::before,
+    .btn-ghost-wrap:hover .btn-ghost::after,
+    .btn-ghost-wrap:hover .bc-tr,
+    .btn-ghost-wrap:hover .bc-bl {
+      width: calc(50% + 1px);
+      height: calc(50% + 1px);
+    }
+
+    .btn-ghost-wrap:hover .btn-ghost {
+      color: var(--paper);
+      background: var(--ink);
+    }
+
+    /* --- BTN-STAMP: Rubber stamp press --- */
+    .btn-stamp {
+      display: inline-block;
+      font-family: var(--ff-body);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--rust);
+      padding: 9px 22px;
+      border: 2px solid var(--rust);
+      position: relative;
+      cursor: pointer;
+      background: transparent;
+      transition: background 0.15s, color 0.15s, transform 0.12s, box-shadow 0.12s;
+      box-shadow: 3px 3px 0 var(--rust);
+    }
+
+    .btn-stamp:hover {
+      background: var(--rust);
+      color: var(--paper);
+      box-shadow: 1px 1px 0 #6a4a0f;
+      transform: translate(2px, 2px);
+    }
+
+    .btn-stamp:active {
+      box-shadow: none;
+      transform: translate(3px, 3px);
+    }
+
+    /* --- BTN-TYPEWRITE: text types in on hover --- */
+    .btn-typewrite {
+      display: inline-block;
+      font-family: var(--ff-body);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink);
+      padding: 10px 22px;
+      border: 2px solid var(--ink);
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      background: var(--paper);
+      transition: color 0.18s;
+      min-width: 180px;
+      text-align: center;
+    }
+
+    .btn-typewrite .tw-default,
+    .btn-typewrite .tw-hover {
+      display: block;
+      transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), opacity 0.22s;
+    }
+
+    .btn-typewrite .tw-hover {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      transform: translateY(100%);
+      opacity: 0;
+      color: var(--paper);
+      margin-top: -0.5em;
+    }
+
+    .btn-typewrite::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--ink);
+      transform: translateY(101%);
+      transition: transform 0.22s cubic-bezier(0.4,0,0.2,1);
+      z-index: 0;
+    }
+
+    .btn-typewrite .tw-default { position: relative; z-index: 1; }
+    .btn-typewrite .tw-hover { z-index: 1; }
+
+    .btn-typewrite:hover::before { transform: translateY(0); }
+    .btn-typewrite:hover .tw-default { transform: translateY(-130%); opacity: 0; }
+    .btn-typewrite:hover .tw-hover { transform: translateY(-50%); opacity: 1; }
+
+    /* --- BTN-OUTLINE-FILL: border expands inward --- */
+    .btn-outline-fill {
+      display: inline-block;
+      font-family: var(--ff-body);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink);
+      padding: 10px 22px;
+      position: relative;
+      cursor: pointer;
+      background: transparent;
+      transition: color 0.25s;
+    }
+
+    .btn-outline-fill::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 2px solid var(--ink);
+      transition: inset 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .btn-outline-fill::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--ink);
+      transform: scale(0);
+      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+      z-index: -1;
+    }
+
+    .btn-outline-fill span { position: relative; z-index: 1; }
+
+    .btn-outline-fill:hover { color: var(--paper); }
+    .btn-outline-fill:hover::before { inset: 4px; border-color: var(--paper); }
+    .btn-outline-fill:hover::after { transform: scale(1); }
+
+    /* --- BTN-PAPER-TEAR: torn bottom edge + lift --- */
+    .btn-rip {
+      display: inline-block;
+      font-family: var(--ff-body);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--paper);
+      padding: 11px 22px 14px;
+      position: relative;
+      cursor: pointer;
+      background: var(--ink);
+      clip-path: polygon(0 0, 100% 0, 100% 75%, 97% 80%, 94% 75%, 91% 82%, 88% 76%, 85% 83%, 82% 77%, 79% 84%, 76% 78%, 73% 85%, 70% 79%, 67% 86%, 64% 80%, 61% 87%, 58% 81%, 55% 88%, 52% 82%, 49% 89%, 46% 83%, 43% 90%, 40% 84%, 37% 91%, 34% 85%, 31% 92%, 28% 86%, 25% 93%, 22% 87%, 19% 94%, 16% 88%, 13% 95%, 10% 89%, 7% 96%, 4% 90%, 1% 97%, 0 100%);
+      transition: clip-path 0.3s ease, background 0.25s, transform 0.2s;
+    }
+
+    .btn-rip:hover {
+      background: var(--rust);
+      transform: translateY(-2px);
+      clip-path: polygon(0 0, 100% 0, 100% 70%, 97% 76%, 94% 70%, 91% 77%, 88% 71%, 85% 78%, 82% 72%, 79% 79%, 76% 73%, 73% 80%, 70% 74%, 67% 81%, 64% 75%, 61% 82%, 58% 76%, 55% 83%, 52% 77%, 49% 84%, 46% 78%, 43% 85%, 40% 79%, 37% 86%, 34% 80%, 31% 87%, 28% 81%, 25% 88%, 22% 82%, 19% 89%, 16% 83%, 13% 90%, 10% 84%, 7% 91%, 4% 85%, 1% 92%, 0 100%);
+    }
+
+    .btn-rip:active { transform: translateY(0); }
+
+    /* --- BTN GROUP (inline buttons side by side) --- */
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+      align-items: center;
+    }
 
     /* ===== CONTACT PAGE ===== */
     .contact-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 0;
       border-top: var(--border);
       border-left: var(--border);
@@ -516,17 +737,9 @@
       margin-bottom: 16px;
     }
 
-    .about-block p {
-      font-size: 13.5px;
-      line-height: 1.75;
-      color: #3a2a1a;
-      margin-bottom: 12px;
-    }
+    .about-block p { font-size: 13.5px; line-height: 1.75; color: #3a2a1a; margin-bottom: 12px; }
 
-    .about-sidebar {
-      border-left: var(--border);
-      padding-left: 28px;
-    }
+    .about-sidebar { border-left: var(--border); padding-left: 28px; }
 
     .aside-label {
       font-size: 9px;
@@ -536,94 +749,12 @@
       margin-bottom: 8px;
     }
 
-    .aside-list {
-      list-style: none;
-    }
+    .aside-list { list-style: none; }
 
     .aside-list li {
       font-size: 12px;
       padding: 6px 0;
       border-bottom: 1px dashed var(--cream-dk);
-    }
-
-    /* ===== FOOTER ===== */
-    footer {
-      background: var(--ink);
-      color: var(--mid);
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 28px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .footer-brand {
-      font-family: 'UnifrakturMaguntia', var(--ff-head);
-      font-size: 28px;
-      color: var(--paper);
-    }
-
-    .footer-copy {
-      font-family: var(--ff-body);
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-align: right;
-      color: var(--cream-dk);
-    }
-
-    /* ===== RUNNING TICKER ===== */
-    .ticker-wrap {
-      background: var(--ink);
-      overflow: hidden;
-      border-top: 2px solid var(--rust);
-      border-bottom: 2px solid var(--rust);
-      height: 30px;
-      display: flex;
-      align-items: center;
-    }
-
-    .ticker-label {
-      background: var(--rust);
-      color: var(--paper);
-      font-family: var(--ff-body);
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 0 14px;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      flex-shrink: 0;
-      z-index: 1;
-    }
-
-    .ticker-track {
-      display: flex;
-      white-space: nowrap;
-      animation: ticker 28s linear infinite;
-    }
-
-    .ticker-track span {
-      font-family: var(--ff-body);
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      color: var(--mid);
-      padding: 0 48px;
-    }
-
-    .ticker-track span strong {
-      color: var(--rust-lt);
-    }
-
-    @keyframes ticker {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
     }
 
     /* ===== HIGHLIGHT BOX ===== */
@@ -669,7 +800,7 @@
       color: #3a2a1a;
     }
 
-    /* ===== PRODUCT PILL (home featured) ===== */
+    /* ===== FEATURED CARDS ===== */
     .featured-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -688,7 +819,6 @@
       display: block;
       background: var(--paper);
       cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
       position: relative;
       overflow: hidden;
     }
@@ -703,55 +833,64 @@
       z-index: 0;
     }
 
-    .featured-item:hover { transform: none; }
     .featured-item:hover::before { transform: translateY(0); }
-
     .featured-item * { position: relative; z-index: 1; }
-
     .featured-item:hover .fi-num,
     .featured-item:hover .fi-name,
     .featured-item:hover .fi-from,
     .featured-item:hover .fi-price { color: var(--paper); }
-
     .featured-item:hover .fi-rule { border-color: var(--mid); }
 
-    .fi-num {
+    .fi-num { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rust); margin-bottom: 8px; transition: color 0.2s; }
+    .fi-name { font-family: var(--ff-head); font-size: 17px; font-weight: 700; line-height: 1.2; margin-bottom: 10px; transition: color 0.2s; }
+    .fi-rule { border-top: 1px solid var(--ink); margin: 10px 0; transition: border-color 0.2s; }
+    .fi-from { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.6; transition: color 0.2s; }
+    .fi-price { font-family: var(--ff-head); font-size: 22px; font-weight: 900; transition: color 0.2s; }
+
+    /* ===== TICKER ===== */
+    .ticker-wrap {
+      background: var(--ink);
+      overflow: hidden;
+      border-top: 2px solid var(--rust);
+      border-bottom: 2px solid var(--rust);
+      height: 30px;
+      display: flex;
+      align-items: center;
+    }
+
+    .ticker-label {
+      background: var(--rust);
+      color: var(--paper);
+      font-family: var(--ff-body);
       font-size: 10px;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--rust);
-      margin-bottom: 8px;
-      transition: color 0.2s;
+      padding: 0 14px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
     }
 
-    .fi-name {
-      font-family: var(--ff-head);
-      font-size: 17px;
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 10px;
-      transition: color 0.2s;
+    .ticker-track {
+      display: flex;
+      white-space: nowrap;
+      animation: ticker 28s linear infinite;
     }
 
-    .fi-rule {
-      border-top: 1px solid var(--ink);
-      margin: 10px 0;
-      transition: border-color 0.2s;
-    }
-
-    .fi-from {
-      font-size: 10px;
+    .ticker-track span {
+      font-family: var(--ff-body);
+      font-size: 11px;
       letter-spacing: 0.1em;
-      text-transform: uppercase;
-      opacity: 0.6;
-      transition: color 0.2s;
+      color: var(--mid);
+      padding: 0 48px;
     }
 
-    .fi-price {
-      font-family: var(--ff-head);
-      font-size: 22px;
-      font-weight: 900;
-      transition: color 0.2s;
+    .ticker-track span strong { color: var(--rust-lt); }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
     }
 
     /* ===== ANNOUNCEMENT BAR ===== */
@@ -766,19 +905,136 @@
       text-transform: uppercase;
     }
 
+    /* ===== FOOTER ===== */
+    footer { background: var(--ink); color: var(--mid); }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-brand { font-family: 'UnifrakturMaguntia', var(--ff-head); font-size: 28px; color: var(--paper); }
+
+    .footer-copy {
+      font-family: var(--ff-body);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-align: right;
+      color: var(--cream-dk);
+    }
+
+    /* ===== FLOATING QUICK ORDER ===== */
+    .fab-order {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 200;
+    }
+
+    .fab-btn {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      text-decoration: none;
+      overflow: hidden;
+      background: var(--ink);
+      border: 2px solid var(--ink);
+      height: 48px;
+      transition: box-shadow 0.2s, transform 0.2s;
+      box-shadow: 4px 4px 0 var(--rust);
+    }
+
+    .fab-btn:hover {
+      box-shadow: 2px 2px 0 var(--rust);
+      transform: translate(2px, 2px);
+    }
+
+    .fab-btn:active {
+      box-shadow: none;
+      transform: translate(4px, 4px);
+    }
+
+    .fab-icon {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--rust);
+      color: var(--paper);
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .fab-label {
+      font-family: var(--ff-body);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--paper);
+      padding: 0 14px;
+      max-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      transition: max-width 0.3s cubic-bezier(0.4,0,0.2,1), padding 0.3s;
+    }
+
+    .fab-order:hover .fab-label {
+      max-width: 160px;
+      padding: 0 14px;
+    }
+
+    /* ===== BUTTON SHOWCASE (halaman produk) ===== */
+    .btn-showcase {
+      padding: 28px;
+      border: var(--border);
+      margin-top: 28px;
+      background: linear-gradient(135deg, #EDE0C8 0%, var(--paper) 100%);
+    }
+
+    .btn-showcase-title {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 18px;
+      border-bottom: 1px solid var(--cream-dk);
+      padding-bottom: 8px;
+    }
+
+    /* ===== NOTE BOX ===== */
+    .note-box {
+      margin-top: 28px;
+      padding: 20px;
+      border: var(--border);
+    }
+
+    .note-box-label {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 8px;
+    }
+
+    .note-box p { font-size: 13px; line-height: 1.7; color: #3a2a1a; }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       .hero-strip { grid-template-columns: 1fr; }
       .hero-divider { display: none; }
       .hero-col { padding: 12px 0; border-bottom: 1px solid var(--ink); }
       .hero-main { order: -1; }
-
       .about-block { grid-template-columns: 1fr; }
       .about-sidebar { border-left: none; border-top: var(--border); padding-left: 0; padding-top: 20px; }
-
       .featured-row { grid-template-columns: 1fr; }
       .columns-2 { column-count: 1; }
-
       .nav-contact { display: none; }
       .nav-links li a { padding: 0 10px; font-size: 10px; }
     }
@@ -786,39 +1042,7 @@
     @media (max-width: 520px) {
       .nav-links li a { padding: 0 8px; font-size: 9px; }
       .footer-inner { flex-direction: column; align-items: flex-start; }
-    }
-
-    /* ===== PRINT MARKS ===== */
-    .print-corner {
-      position: absolute;
-      font-size: 9px;
-      color: var(--rust);
-      font-family: var(--ff-body);
-      letter-spacing: 0.1em;
-      opacity: 0.5;
-    }
-
-    .product-card { position: relative; }
-
-    /* ===== PAGE TRANSITIONS ===== */
-    .page-section {
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ===== SCROLL HINT ===== */
-    .scroll-hint {
-      text-align: center;
-      padding: 20px;
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--rust);
-      opacity: 0.7;
+      .fab-order { bottom: 18px; right: 18px; }
     }
   </style>
 </head>
@@ -826,7 +1050,7 @@
 
 <!-- ANNOUNCEMENT BAR -->
 <div class="annc-bar">
-  Open for order — hubungi via WhatsApp atau Telegram untuk pemesanan
+  Open for order &mdash; hubungi via WhatsApp atau Telegram untuk pemesanan
 </div>
 
 <!-- TOP NAV -->
@@ -834,9 +1058,9 @@
   <div class="nav-top-inner">
     <span class="nav-date">Est. 2024 &nbsp;/&nbsp; Artoria Shop</span>
     <ul class="nav-links">
-      <li><a href="#" onclick="showPage('home'); return false;"><span>Beranda</span></a></li>
-      <li><a href="#" onclick="showPage('products'); return false;"><span>Produk</span></a></li>
-      <li><a href="#" onclick="showPage('contact'); return false;"><span>Kontak</span></a></li>
+      <li><a href="#" onclick="showPage('home'); return false;"><span class="nav-text">Beranda</span></a></li>
+      <li><a href="#" onclick="showPage('products'); return false;"><span class="nav-text">Produk</span></a></li>
+      <li><a href="#" onclick="showPage('contact'); return false;"><span class="nav-text">Kontak</span></a></li>
     </ul>
     <span class="nav-contact">WA: 085706606594</span>
   </div>
@@ -866,9 +1090,7 @@
   </div>
 </div>
 
-<!-- ===================== -->
-<!-- PAGE: HOME            -->
-<!-- ===================== -->
+<!-- ===================== PAGE: HOME ===================== -->
 <div id="page-home" class="page-section active">
   <div class="hero-strip">
     <div class="hero-col">
@@ -921,6 +1143,19 @@
       </div>
     </div>
 
+    <!-- CTA buttons on home -->
+    <div class="btn-group" style="margin-top: 28px;">
+      <a href="https://wa.me/6285706606594" target="_blank" class="btn-order">
+        <span>Order Sekarang</span>
+        <i class="btn-arrow">&#8594;</i>
+      </a>
+      <div class="btn-ghost-wrap">
+        <span class="bc-tr"></span>
+        <span class="bc-bl"></span>
+        <a href="#" onclick="showPage('products'); return false;" class="btn-ghost">Lihat Produk</a>
+      </div>
+    </div>
+
     <div class="highlight-box" style="margin-top: 36px;">
       <p>"Layanan terjangkau, produk fungsional, dan dukungan langsung dari pemilik."</p>
     </div>
@@ -931,6 +1166,9 @@
         <div class="columns-2">
           <p>Artoria adalah toko digital kecil yang dikelola secara personal, fokus pada layanan berbasis teknologi WhatsApp dan hosting ringan. Kami tidak menjual janji besar, hanya produk yang benar-benar bisa digunakan.</p>
           <p>Setiap pesanan ditangani langsung oleh pemilik, sehingga komunikasi lebih cepat dan responsif. Tidak ada agen perantara, tidak ada waktu tunggu panjang.</p>
+        </div>
+        <div class="btn-group" style="margin-top: 20px;">
+          <a href="#" onclick="showPage('contact'); return false;" class="btn-stamp">Hubungi Kami</a>
         </div>
       </div>
       <div class="about-sidebar">
@@ -950,9 +1188,7 @@
   </div>
 </div>
 
-<!-- ===================== -->
-<!-- PAGE: PRODUCTS        -->
-<!-- ===================== -->
+<!-- ===================== PAGE: PRODUCTS ===================== -->
 <div id="page-products" class="page-section">
   <div class="main-wrapper">
 
@@ -980,7 +1216,11 @@
           <tr><td>Per Bulan</td><td>Rp 10.000</td></tr>
         </table>
 
-        <a href="https://wa.me/6285706606594?text=Halo,%20saya%20mau%20order%20Sewa%20Bot%20WhatsApp" class="btn-order" target="_blank"><span>Order via WhatsApp</span></a>
+        <!-- ink flood button -->
+        <a href="https://wa.me/6285706606594?text=Halo,%20saya%20mau%20order%20Sewa%20Bot%20WhatsApp" class="btn-order" target="_blank">
+          <span>Order via WA</span>
+          <i class="btn-arrow">&#8594;</i>
+        </a>
       </div>
 
       <!-- PRODUCT 2: PANEL -->
@@ -1002,7 +1242,11 @@
           <tr><td>Admin Panel</td><td>Rp 25.000</td></tr>
         </table>
 
-        <a href="https://wa.me/6285706606594?text=Halo,%20saya%20mau%20order%20Panel%20Pterodactyl" class="btn-order" target="_blank"><span>Order via WhatsApp</span></a>
+        <!-- typewrite swap button -->
+        <a href="https://wa.me/6285706606594?text=Halo,%20saya%20mau%20order%20Panel%20Pterodactyl" class="btn-typewrite" target="_blank">
+          <span class="tw-default">Order via WA</span>
+          <span class="tw-hover">Hubungi Sekarang</span>
+        </a>
       </div>
 
       <!-- PRODUCT 3: SCRIPT -->
@@ -1030,27 +1274,46 @@
           <div class="amount">30k</div>
           <div class="unit">update selamanya</div>
         </div>
-        <br><br>
-        <a href="https://wa.me/6285706606594?text=Halo,%20saya%20mau%20order%20Script%20Neko-Arc" class="btn-order" target="_blank"><span>Order via WhatsApp</span></a>
+
+        <div class="btn-group">
+          <!-- torn paper button -->
+          <a href="https://wa.me/6285706606594?text=Halo,%20saya%20mau%20order%20Script%20Neko-Arc" class="btn-rip" target="_blank">Order Script</a>
+        </div>
       </div>
 
     </div>
 
-    <div class="highlight-box" style="margin-top: 32px;">
+    <!-- button showcase section -->
+    <div class="btn-showcase">
+      <div class="btn-showcase-title">Cara Order &mdash; Pilih Platform</div>
+      <div class="btn-group">
+        <a href="https://wa.me/6285706606594" target="_blank" class="btn-order">
+          <span>WhatsApp</span>
+          <i class="btn-arrow">&#8594;</i>
+        </a>
+        <div class="btn-ghost-wrap">
+          <span class="bc-tr"></span>
+          <span class="bc-bl"></span>
+          <a href="https://t.me/jinkasei" target="_blank" class="btn-ghost">Telegram</a>
+        </div>
+        <a href="mailto:halfyzodiac@gmail.com" class="btn-stamp">Email</a>
+        <a href="#" onclick="showPage('contact'); return false;" class="btn-outline-fill"><span>Semua Kontak</span></a>
+      </div>
+    </div>
+
+    <div class="highlight-box">
       <p>"Semua harga sudah final. Tidak ada biaya tambahan tersembunyi."</p>
     </div>
 
-    <div style="margin-top: 28px; padding: 20px; border: var(--border);">
-      <p style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rust); margin-bottom: 8px;">Catatan Pemesanan</p>
-      <p style="font-size: 13px; line-height: 1.7; color: #3a2a1a;">Pembayaran dikonfirmasi terlebih dahulu sebelum produk dikirim. Untuk pertanyaan teknis atau negosiasi paket, silakan hubungi langsung via Telegram atau WhatsApp.</p>
+    <div class="note-box">
+      <div class="note-box-label">Catatan Pemesanan</div>
+      <p>Pembayaran dikonfirmasi terlebih dahulu sebelum produk dikirim. Untuk pertanyaan teknis atau negosiasi paket, silakan hubungi langsung via Telegram atau WhatsApp.</p>
     </div>
 
   </div>
 </div>
 
-<!-- ===================== -->
-<!-- PAGE: CONTACT         -->
-<!-- ===================== -->
+<!-- ===================== PAGE: CONTACT ===================== -->
 <div id="page-contact" class="page-section">
   <div class="main-wrapper">
 
@@ -1092,12 +1355,33 @@
       </a>
     </div>
 
+    <!-- quick action buttons on contact page -->
+    <div class="btn-group" style="margin-bottom: 36px;">
+      <a href="https://wa.me/6285706606594" target="_blank" class="btn-order">
+        <span>Buka WhatsApp</span>
+        <i class="btn-arrow">&#8594;</i>
+      </a>
+      <a href="https://t.me/jinkasei" target="_blank" class="btn-typewrite">
+        <span class="tw-default">Buka Telegram</span>
+        <span class="tw-hover">@jinkasei</span>
+      </a>
+      <a href="https://github.com/Mirai-Kanade" target="_blank" class="btn-stamp">Github</a>
+    </div>
+
     <div class="about-block">
       <div>
         <h2>Jam Operasional</h2>
         <div class="columns-2">
           <p>Artoria dikelola secara personal, sehingga respons mungkin tidak selalu instan. Namun kami selalu berusaha membalas dalam 1x24 jam di hari aktif.</p>
           <p>Untuk keperluan mendesak, Telegram adalah pilihan terbaik. Untuk order standar, WhatsApp sudah lebih dari cukup.</p>
+        </div>
+        <div class="btn-group" style="margin-top: 20px;">
+          <div class="btn-ghost-wrap">
+            <span class="bc-tr"></span>
+            <span class="bc-bl"></span>
+            <a href="#" onclick="showPage('products'); return false;" class="btn-ghost">Lihat Produk</a>
+          </div>
+          <a href="#" onclick="showPage('home'); return false;" class="btn-outline-fill"><span>Kembali ke Beranda</span></a>
         </div>
       </div>
       <div class="about-sidebar">
@@ -1125,6 +1409,14 @@
     </div>
   </div>
 </footer>
+
+<!-- FLOATING QUICK ORDER -->
+<div class="fab-order">
+  <a href="https://wa.me/6285706606594?text=Halo,%20saya%20mau%20order" target="_blank" class="fab-btn">
+    <div class="fab-icon">&#9993;</div>
+    <div class="fab-label">Quick Order</div>
+  </a>
+</div>
 
 <script>
   function showPage(name) {
