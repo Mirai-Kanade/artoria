@@ -1,1447 +1,661 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Artoria - Your Highness</title>
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/jpeg" href="https://x.xcute.workers.dev/f/images/3b6a0cf518e1.jpg" />
-  <link rel="apple-touch-icon" href="https://x.xcute.workers.dev/f/images/3b6a0cf518e1.jpg" />
-
-  <!-- Open Graph (preview saat link dibagikan) -->
-  <meta property="og:title" content="Artoria - Your Highness" />
-  <meta property="og:description" content="Sewa Bot WhatsApp, Panel Pterodactyl, Script Neko-Arc. Order langsung via WA atau Telegram." />
-  <meta property="og:image" content="https://x.xcute.workers.dev/f/images/3b6a0cf518e1.jpg" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://x.xcute.workers.dev/f/images/3b6a0cf518e1.jpg" />
-
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=UnifrakturMaguntia&display=swap" rel="stylesheet" />
-  <style>
-    /* ===== RESET & BASE ===== */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --ink:       #1A0F08;
-      --paper:     #F2E8D5;
-      --mid:       #D4C5A9;
-      --rust:      #8B6914;
-      --rust-lt:   #B8903A;
-      --cream-dk:  #C9B89A;
-      --border:    2px solid #1A0F08;
-      --border-th: 4px solid #1A0F08;
-      --ff-head:   'Playfair Display', Georgia, serif;
-      --ff-body:   'Courier Prime', 'Courier New', monospace;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background-color: var(--paper);
-      color: var(--ink);
-      font-family: var(--ff-body);
-      font-size: 15px;
-      line-height: 1.65;
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 9999;
-    }
-
-    /* ===== NAVIGATION ===== */
-    .nav-top {
-      border-bottom: var(--border);
-      background: var(--paper);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .nav-top-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px;
-      height: 48px;
-    }
-
-    .nav-date {
-      font-family: var(--ff-body);
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--rust);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 0;
-      list-style: none;
-    }
-
-    /* NAV BUTTON — typewriter underline */
-    .nav-links li a {
-      display: block;
-      padding: 0 18px;
-      height: 48px;
-      line-height: 48px;
-      font-family: var(--ff-body);
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      text-decoration: none;
-      color: var(--ink);
-      border-left: 1px solid var(--ink);
-      position: relative;
-      overflow: hidden;
-      transition: color 0.22s;
-    }
-
-    .nav-links li a .nav-text {
-      position: relative;
-      z-index: 1;
-    }
-
-    .nav-links li a::before {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 100%;
-      background: var(--ink);
-      transform: translateY(100%);
-      transition: transform 0.22s cubic-bezier(0.4,0,0.2,1);
-      z-index: 0;
-    }
-
-    .nav-links li a:hover { color: var(--paper); }
-    .nav-links li a:hover::before { transform: translateY(0); }
-    .nav-links li:last-child a { border-right: 1px solid var(--ink); }
-
-    .nav-contact {
-      font-family: var(--ff-body);
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    /* ===== MASTHEAD ===== */
-    .masthead {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 36px 24px 0;
-      text-align: center;
-    }
-
-    .masthead-rule-top {
-      border-top: 6px double var(--ink);
-      border-bottom: 2px solid var(--ink);
-      height: 10px;
-      margin-bottom: 24px;
-    }
-
-    .masthead-eyebrow {
-      font-family: var(--ff-body);
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--rust);
-      margin-bottom: 8px;
-    }
-
-    .masthead-title {
-      font-family: 'UnifrakturMaguntia', var(--ff-head);
-      font-size: clamp(52px, 9vw, 108px);
-      line-height: 1;
-      letter-spacing: 0.02em;
-      color: var(--ink);
-      text-shadow: 2px 2px 0 rgba(139,105,20,0.15);
-      margin-bottom: 6px;
-    }
-
-    .masthead-slogan {
-      font-family: var(--ff-head);
-      font-style: italic;
-      font-size: clamp(14px, 2.5vw, 20px);
-      letter-spacing: 0.12em;
-      color: var(--rust);
-      margin-bottom: 20px;
-    }
-
-    .masthead-rule-bottom {
-      border-top: 2px solid var(--ink);
-      border-bottom: 6px double var(--ink);
-      height: 10px;
-    }
-
-    /* ===== PAGE SECTIONS ===== */
-    .page-section { display: none; }
-    .page-section.active { display: block; animation: pgFade 0.35s ease; }
-
-    @keyframes pgFade {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ===== HERO STRIP ===== */
-    .hero-strip {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 28px 24px 0;
-      display: grid;
-      grid-template-columns: 1fr 2px 2fr 2px 1fr;
-      gap: 0;
-    }
-
-    .hero-col { padding: 0 24px; }
-    .hero-divider { background: var(--ink); }
-
-    .hero-tag {
-      display: inline-block;
-      background: var(--ink);
-      color: var(--paper);
-      font-family: var(--ff-body);
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 3px 8px;
-      margin-bottom: 10px;
-    }
-
-    .hero-col h2 {
-      font-family: var(--ff-head);
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .hero-col p { font-size: 12.5px; line-height: 1.7; color: #3a2a1a; }
-
-    .hero-main h1 {
-      font-family: var(--ff-head);
-      font-size: clamp(28px, 5vw, 52px);
-      font-weight: 900;
-      line-height: 1.1;
-      margin-bottom: 14px;
-      border-bottom: 3px solid var(--ink);
-      padding-bottom: 14px;
-    }
-
-    .hero-main p { font-size: 13.5px; line-height: 1.75; color: #3a2a1a; }
-
-    /* ===== MAIN CONTENT WRAPPER ===== */
-    .main-wrapper {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 32px 24px 80px;
-    }
-
-    /* ===== SECTION HEADER ===== */
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      gap: 16px;
-      border-top: var(--border-th);
-      border-bottom: var(--border);
-      padding: 10px 0;
-      margin-bottom: 28px;
-    }
-
-    .section-header h2 {
-      font-family: var(--ff-head);
-      font-size: clamp(22px, 4vw, 36px);
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      flex-shrink: 0;
-    }
-
-    .section-header .rule-fill { flex: 1; height: 1px; background: var(--ink); opacity: 0.4; }
-
-    .section-header .section-num {
-      font-family: var(--ff-body);
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      color: var(--rust);
-      text-transform: uppercase;
-      flex-shrink: 0;
-    }
-
-    /* ===== PRODUCT GRID ===== */
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 0;
-      border-top: var(--border);
-      border-left: var(--border);
-    }
-
-    .product-card {
-      border-right: var(--border);
-      border-bottom: var(--border);
-      padding: 24px;
-      position: relative;
-      background: var(--paper);
-      transition: background 0.2s;
-      overflow: hidden;
-    }
-
-    .product-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 4px;
-      background: var(--rust);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.3s ease;
-    }
-
-    .product-card:hover { background: #EEE0C5; }
-    .product-card:hover::before { transform: scaleX(1); }
-
-    .product-card-label {
-      display: inline-block;
-      background: var(--rust);
-      color: var(--paper);
-      font-family: var(--ff-body);
-      font-size: 9px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      padding: 3px 8px;
-      margin-bottom: 10px;
-    }
-
-    .product-card h3 {
-      font-family: var(--ff-head);
-      font-size: 20px;
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 12px;
-      border-bottom: 1px solid var(--ink);
-      padding-bottom: 10px;
-    }
-
-    .price-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
-
-    .price-table td {
-      padding: 5px 0;
-      font-size: 13px;
-      border-bottom: 1px dashed var(--cream-dk);
-    }
-
-    .price-table td:last-child {
-      text-align: right;
-      font-weight: 700;
-      font-family: var(--ff-head);
-      font-size: 14px;
-    }
-
-    .price-table .pt-group-label td {
-      padding-top: 10px;
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--rust);
-      border-bottom: none;
-      font-weight: 700;
-    }
-
-    /* ===== FEATURE LIST ===== */
-    .feature-list { list-style: none; margin-bottom: 18px; }
-
-    .feature-list li {
-      font-size: 12.5px;
-      padding: 4px 0;
-      border-bottom: 1px dashed var(--cream-dk);
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-    }
-
-    .feature-list li::before { content: '+'; color: var(--rust); font-weight: 700; flex-shrink: 0; }
-
-    /* ===== PRICE BADGE ===== */
-    .price-badge {
-      display: inline-block;
-      border: 2px solid var(--rust);
-      padding: 4px 12px;
-      margin-top: 8px;
-      margin-bottom: 6px;
-    }
-
-    .price-badge .from { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rust); }
-    .price-badge .amount { font-family: var(--ff-head); font-size: 26px; font-weight: 900; line-height: 1; }
-    .price-badge .unit { font-size: 11px; color: #5a4a3a; }
-
-    /* ===================================
-       BUTTON SYSTEM — SEMUA VARIASI
-    ==================================== */
-
-    /* --- BTN-ORDER: Ink flood dari kiri --- */
-    .btn-order {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--ink);
-      color: var(--paper);
-      font-family: var(--ff-body);
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      text-decoration: none;
-      padding: 11px 22px;
-      border: 2px solid var(--ink);
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-      transition: color 0.28s, border-color 0.28s;
-      margin-top: 8px;
-    }
-
-    .btn-order::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--rust);
-      transform: translateX(-101%);
-      transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
-      z-index: 0;
-    }
-
-    .btn-order:hover { border-color: var(--rust); }
-    .btn-order:hover::after { transform: translateX(0); }
-    .btn-order:active { transform: scale(0.97); }
-    .btn-order span { position: relative; z-index: 1; }
-
-    /* arrow tip */
-    .btn-order .btn-arrow {
-      position: relative;
-      z-index: 1;
-      display: inline-block;
-      transition: transform 0.22s;
-      font-style: normal;
-    }
-
-    .btn-order:hover .btn-arrow { transform: translateX(5px); }
-
-    /* --- BTN-GHOST: Bracket collapse (corner lines converge) --- */
-    .btn-ghost {
-      display: inline-block;
-      font-family: var(--ff-body);
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      text-decoration: none;
-      color: var(--ink);
-      padding: 10px 22px;
-      position: relative;
-      cursor: pointer;
-      transition: color 0.25s, background 0.25s;
-      background: transparent;
-      border: none;
-    }
-
-    /* four corner brackets */
-    .btn-ghost::before,
-    .btn-ghost::after {
-      content: '';
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      transition: width 0.25s, height 0.25s;
-    }
-
-    .btn-ghost::before {
-      top: 0; left: 0;
-      border-top: 2px solid var(--ink);
-      border-left: 2px solid var(--ink);
-    }
-
-    .btn-ghost::after {
-      bottom: 0; right: 0;
-      border-bottom: 2px solid var(--ink);
-      border-right: 2px solid var(--ink);
-    }
-
-    /* inner corners via wrapper approach using box-shadow */
-    .btn-ghost-wrap {
-      position: relative;
-      display: inline-block;
-    }
-
-    .btn-ghost-wrap .bc-tr,
-    .btn-ghost-wrap .bc-bl {
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      pointer-events: none;
-      transition: width 0.25s, height 0.25s;
-    }
-
-    .btn-ghost-wrap .bc-tr {
-      top: 0; right: 0;
-      border-top: 2px solid var(--ink);
-      border-right: 2px solid var(--ink);
-    }
-
-    .btn-ghost-wrap .bc-bl {
-      bottom: 0; left: 0;
-      border-bottom: 2px solid var(--ink);
-      border-left: 2px solid var(--ink);
-    }
-
-    .btn-ghost-wrap:hover .btn-ghost::before,
-    .btn-ghost-wrap:hover .btn-ghost::after,
-    .btn-ghost-wrap:hover .bc-tr,
-    .btn-ghost-wrap:hover .bc-bl {
-      width: calc(50% + 1px);
-      height: calc(50% + 1px);
-    }
-
-    .btn-ghost-wrap:hover .btn-ghost {
-      color: var(--paper);
-      background: var(--ink);
-    }
-
-    /* --- BTN-STAMP: Rubber stamp press --- */
-    .btn-stamp {
-      display: inline-block;
-      font-family: var(--ff-body);
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      text-decoration: none;
-      color: var(--rust);
-      padding: 9px 22px;
-      border: 2px solid var(--rust);
-      position: relative;
-      cursor: pointer;
-      background: transparent;
-      transition: background 0.15s, color 0.15s, transform 0.12s, box-shadow 0.12s;
-      box-shadow: 3px 3px 0 var(--rust);
-    }
-
-    .btn-stamp:hover {
-      background: var(--rust);
-      color: var(--paper);
-      box-shadow: 1px 1px 0 #6a4a0f;
-      transform: translate(2px, 2px);
-    }
-
-    .btn-stamp:active {
-      box-shadow: none;
-      transform: translate(3px, 3px);
-    }
-
-    /* --- BTN-TYPEWRITE: text types in on hover --- */
-    .btn-typewrite {
-      display: inline-block;
-      font-family: var(--ff-body);
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      text-decoration: none;
-      color: var(--ink);
-      padding: 10px 22px;
-      border: 2px solid var(--ink);
-      position: relative;
-      cursor: pointer;
-      overflow: hidden;
-      background: var(--paper);
-      transition: color 0.18s;
-      min-width: 180px;
-      text-align: center;
-    }
-
-    .btn-typewrite .tw-default,
-    .btn-typewrite .tw-hover {
-      display: block;
-      transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), opacity 0.22s;
-    }
-
-    .btn-typewrite .tw-hover {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      width: 100%;
-      transform: translateY(100%);
-      opacity: 0;
-      color: var(--paper);
-      margin-top: -0.5em;
-    }
-
-    .btn-typewrite::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--ink);
-      transform: translateY(101%);
-      transition: transform 0.22s cubic-bezier(0.4,0,0.2,1);
-      z-index: 0;
-    }
-
-    .btn-typewrite .tw-default { position: relative; z-index: 1; }
-    .btn-typewrite .tw-hover { z-index: 1; }
-
-    .btn-typewrite:hover::before { transform: translateY(0); }
-    .btn-typewrite:hover .tw-default { transform: translateY(-130%); opacity: 0; }
-    .btn-typewrite:hover .tw-hover { transform: translateY(-50%); opacity: 1; }
-
-    /* --- BTN-OUTLINE-FILL: border expands inward --- */
-    .btn-outline-fill {
-      display: inline-block;
-      font-family: var(--ff-body);
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      text-decoration: none;
-      color: var(--ink);
-      padding: 10px 22px;
-      position: relative;
-      cursor: pointer;
-      background: transparent;
-      transition: color 0.25s;
-    }
-
-    .btn-outline-fill::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border: 2px solid var(--ink);
-      transition: inset 0.25s cubic-bezier(0.4,0,0.2,1);
-    }
-
-    .btn-outline-fill::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--ink);
-      transform: scale(0);
-      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
-      z-index: -1;
-    }
-
-    .btn-outline-fill span { position: relative; z-index: 1; }
-
-    .btn-outline-fill:hover { color: var(--paper); }
-    .btn-outline-fill:hover::before { inset: 4px; border-color: var(--paper); }
-    .btn-outline-fill:hover::after { transform: scale(1); }
-
-    /* --- BTN-PAPER-TEAR: torn bottom edge + lift --- */
-    .btn-rip {
-      display: inline-block;
-      font-family: var(--ff-body);
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      text-decoration: none;
-      color: var(--paper);
-      padding: 11px 22px 14px;
-      position: relative;
-      cursor: pointer;
-      background: var(--ink);
-      clip-path: polygon(0 0, 100% 0, 100% 75%, 97% 80%, 94% 75%, 91% 82%, 88% 76%, 85% 83%, 82% 77%, 79% 84%, 76% 78%, 73% 85%, 70% 79%, 67% 86%, 64% 80%, 61% 87%, 58% 81%, 55% 88%, 52% 82%, 49% 89%, 46% 83%, 43% 90%, 40% 84%, 37% 91%, 34% 85%, 31% 92%, 28% 86%, 25% 93%, 22% 87%, 19% 94%, 16% 88%, 13% 95%, 10% 89%, 7% 96%, 4% 90%, 1% 97%, 0 100%);
-      transition: clip-path 0.3s ease, background 0.25s, transform 0.2s;
-    }
-
-    .btn-rip:hover {
-      background: var(--rust);
-      transform: translateY(-2px);
-      clip-path: polygon(0 0, 100% 0, 100% 70%, 97% 76%, 94% 70%, 91% 77%, 88% 71%, 85% 78%, 82% 72%, 79% 79%, 76% 73%, 73% 80%, 70% 74%, 67% 81%, 64% 75%, 61% 82%, 58% 76%, 55% 83%, 52% 77%, 49% 84%, 46% 78%, 43% 85%, 40% 79%, 37% 86%, 34% 80%, 31% 87%, 28% 81%, 25% 88%, 22% 82%, 19% 89%, 16% 83%, 13% 90%, 10% 84%, 7% 91%, 4% 85%, 1% 92%, 0 100%);
-    }
-
-    .btn-rip:active { transform: translateY(0); }
-
-    /* --- BTN GROUP (inline buttons side by side) --- */
-    .btn-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 16px;
-      align-items: center;
-    }
-
-    /* ===== CONTACT PAGE ===== */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 0;
-      border-top: var(--border);
-      border-left: var(--border);
-      margin-bottom: 40px;
-    }
-
-    .contact-card {
-      border-right: var(--border);
-      border-bottom: var(--border);
-      padding: 20px;
-      text-decoration: none;
-      color: var(--ink);
-      background: var(--paper);
-      position: relative;
-      overflow: hidden;
-      display: block;
-      transition: background 0.2s;
-    }
-
-    .contact-card::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 3px;
-      background: var(--rust);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.3s;
-    }
-
-    .contact-card:hover { background: #EEE0C5; }
-    .contact-card:hover::after { transform: scaleX(1); }
-
-    .contact-card-platform {
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--rust);
-      margin-bottom: 6px;
-    }
-
-    .contact-card-value {
-      font-family: var(--ff-head);
-      font-size: 15px;
-      font-weight: 700;
-      word-break: break-all;
-    }
-
-    .contact-card-cta {
-      margin-top: 10px;
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      opacity: 0.5;
-    }
-
-    /* ===== ABOUT BLOCK ===== */
-    .about-block {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 32px;
-      border-top: var(--border-th);
-      border-bottom: var(--border);
-      padding: 28px 0;
-    }
-
-    .about-block h2 {
-      font-family: var(--ff-head);
-      font-size: clamp(26px, 5vw, 48px);
-      font-weight: 900;
-      line-height: 1.1;
-      margin-bottom: 16px;
-    }
-
-    .about-block p { font-size: 13.5px; line-height: 1.75; color: #3a2a1a; margin-bottom: 12px; }
-
-    .about-sidebar { border-left: var(--border); padding-left: 28px; }
-
-    .aside-label {
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--rust);
-      margin-bottom: 8px;
-    }
-
-    .aside-list { list-style: none; }
-
-    .aside-list li {
-      font-size: 12px;
-      padding: 6px 0;
-      border-bottom: 1px dashed var(--cream-dk);
-    }
-
-    /* ===== HIGHLIGHT BOX ===== */
-    .highlight-box {
-      background: var(--ink);
-      color: var(--paper);
-      padding: 20px 24px;
-      margin: 24px 0;
-    }
-
-    .highlight-box p {
-      font-family: var(--ff-head);
-      font-style: italic;
-      font-size: clamp(16px, 3vw, 24px);
-      line-height: 1.4;
-      text-align: center;
-    }
-
-    /* ===== STAMP ELEMENT ===== */
-    .stamp {
-      display: inline-block;
-      border: 3px solid var(--rust);
-      padding: 6px 14px;
-      font-family: var(--ff-body);
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--rust);
-      transform: rotate(-2deg);
-      opacity: 0.85;
-      transition: opacity 0.2s, transform 0.2s;
-    }
-
-    .stamp:hover { opacity: 1; transform: rotate(0deg); }
-
-    /* ===== COLUMNS TEXT ===== */
-    .columns-2 {
-      column-count: 2;
-      column-gap: 40px;
-      column-rule: 1px solid var(--cream-dk);
-      font-size: 13px;
-      line-height: 1.75;
-      color: #3a2a1a;
-    }
-
-    /* ===== FEATURED CARDS ===== */
-    .featured-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-      border-top: var(--border);
-      border-left: var(--border);
-      margin-top: 32px;
-    }
-
-    .featured-item {
-      border-right: var(--border);
-      border-bottom: var(--border);
-      padding: 20px;
-      text-decoration: none;
-      color: var(--ink);
-      display: block;
-      background: var(--paper);
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .featured-item::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--ink);
-      transform: translateY(101%);
-      transition: transform 0.28s ease;
-      z-index: 0;
-    }
-
-    .featured-item:hover::before { transform: translateY(0); }
-    .featured-item * { position: relative; z-index: 1; }
-    .featured-item:hover .fi-num,
-    .featured-item:hover .fi-name,
-    .featured-item:hover .fi-from,
-    .featured-item:hover .fi-price { color: var(--paper); }
-    .featured-item:hover .fi-rule { border-color: var(--mid); }
-
-    .fi-num { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rust); margin-bottom: 8px; transition: color 0.2s; }
-    .fi-name { font-family: var(--ff-head); font-size: 17px; font-weight: 700; line-height: 1.2; margin-bottom: 10px; transition: color 0.2s; }
-    .fi-rule { border-top: 1px solid var(--ink); margin: 10px 0; transition: border-color 0.2s; }
-    .fi-from { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.6; transition: color 0.2s; }
-    .fi-price { font-family: var(--ff-head); font-size: 22px; font-weight: 900; transition: color 0.2s; }
-
-    /* ===== TICKER ===== */
-    .ticker-wrap {
-      background: var(--ink);
-      overflow: hidden;
-      border-top: 2px solid var(--rust);
-      border-bottom: 2px solid var(--rust);
-      height: 30px;
-      display: flex;
-      align-items: center;
-    }
-
-    .ticker-label {
-      background: var(--rust);
-      color: var(--paper);
-      font-family: var(--ff-body);
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 0 14px;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    .ticker-track {
-      display: flex;
-      white-space: nowrap;
-      animation: ticker 28s linear infinite;
-    }
-
-    .ticker-track span {
-      font-family: var(--ff-body);
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      color: var(--mid);
-      padding: 0 48px;
-    }
-
-    .ticker-track span strong { color: var(--rust-lt); }
-
-    @keyframes ticker {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
-
-    /* ===== ANNOUNCEMENT BAR ===== */
-    .annc-bar {
-      background: var(--rust);
-      color: var(--paper);
-      text-align: center;
-      padding: 8px 24px;
-      font-family: var(--ff-body);
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-    }
-
-    /* ===== FOOTER ===== */
-    footer { background: var(--ink); color: var(--mid); }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 28px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .footer-brand { font-family: 'UnifrakturMaguntia', var(--ff-head); font-size: 28px; color: var(--paper); }
-
-    .footer-copy {
-      font-family: var(--ff-body);
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-align: right;
-      color: var(--cream-dk);
-    }
-
-    /* ===== FLOATING QUICK ORDER ===== */
-    .fab-order {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
-      z-index: 200;
-    }
-
-    .fab-btn {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      text-decoration: none;
-      overflow: hidden;
-      background: var(--ink);
-      border: 2px solid var(--ink);
-      height: 48px;
-      transition: box-shadow 0.2s, transform 0.2s;
-      box-shadow: 4px 4px 0 var(--rust);
-    }
-
-    .fab-btn:hover {
-      box-shadow: 2px 2px 0 var(--rust);
-      transform: translate(2px, 2px);
-    }
-
-    .fab-btn:active {
-      box-shadow: none;
-      transform: translate(4px, 4px);
-    }
-
-    .fab-icon {
-      width: 44px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--rust);
-      color: var(--paper);
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-
-    .fab-label {
-      font-family: var(--ff-body);
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--paper);
-      padding: 0 14px;
-      max-width: 0;
-      overflow: hidden;
-      white-space: nowrap;
-      transition: max-width 0.3s cubic-bezier(0.4,0,0.2,1), padding 0.3s;
-    }
-
-    .fab-order:hover .fab-label {
-      max-width: 160px;
-      padding: 0 14px;
-    }
-
-    /* ===== BUTTON SHOWCASE (halaman produk) ===== */
-    .btn-showcase {
-      padding: 28px;
-      border: var(--border);
-      margin-top: 28px;
-      background: linear-gradient(135deg, #EDE0C8 0%, var(--paper) 100%);
-    }
-
-    .btn-showcase-title {
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--rust);
-      margin-bottom: 18px;
-      border-bottom: 1px solid var(--cream-dk);
-      padding-bottom: 8px;
-    }
-
-    /* ===== NOTE BOX ===== */
-    .note-box {
-      margin-top: 28px;
-      padding: 20px;
-      border: var(--border);
-    }
-
-    .note-box-label {
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--rust);
-      margin-bottom: 8px;
-    }
-
-    .note-box p { font-size: 13px; line-height: 1.7; color: #3a2a1a; }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 768px) {
-      .hero-strip { grid-template-columns: 1fr; }
-      .hero-divider { display: none; }
-      .hero-col { padding: 12px 0; border-bottom: 1px solid var(--ink); }
-      .hero-main { order: -1; }
-      .about-block { grid-template-columns: 1fr; }
-      .about-sidebar { border-left: none; border-top: var(--border); padding-left: 0; padding-top: 20px; }
-      .featured-row { grid-template-columns: 1fr; }
-      .columns-2 { column-count: 1; }
-      .nav-contact { display: none; }
-      .nav-links li a { padding: 0 10px; font-size: 10px; }
-    }
-
-    @media (max-width: 520px) {
-      .nav-links li a { padding: 0 8px; font-size: 9px; }
-      .footer-inner { flex-direction: column; align-items: flex-start; }
-      .fab-order { bottom: 18px; right: 18px; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Artoria | Your Highness</title>
+
+<link rel="icon" type="image/jpeg" href="https://x.xcute.workers.dev/f/images/3b6a0cf518e1.jpg" />
+<link rel="apple-touch-icon" href="https://x.xcute.workers.dev/f/images/3b6a0cf518e1.jpg" />
+
+<meta property="og:title" content="Artoria | Your Highness" />
+<meta property="og:description" content="Sewa Bot WhatsApp, Panel Pterodactyl, dan Script Neko Arc. Order langsung lewat WhatsApp atau Telegram." />
+<meta property="og:image" content="https://x.xcute.workers.dev/f/images/3b6a0cf518e1.jpg" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://x.xcute.workers.dev/f/images/3b6a0cf518e1.jpg" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+/* ============ RESET ============ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+img{max-width:100%;display:block;}
+a{color:inherit;}
+ul{list-style:none;}
+button{font:inherit;}
+
+/* ============ TOKENS ============ */
+:root{
+  --ink:#000000;
+  --canvas:#ffffff;
+  --canvas-dark:#010120;
+  --surface-soft:#26263a;
+  --surface-soft-2:#313641;
+  --hairline:#e9e9e9;
+  --hairline-on-dark:rgba(255,255,255,0.12);
+  --body:#7a7a7a;
+  --on-dark:#ffffff;
+  --on-dark-dim:#9b9bb0;
+
+  --orange:#fc4c02;
+  --magenta:#ef2cc1;
+  --periwinkle:#bdbbff;
+  --mint:#c8f6f9;
+
+  --ff-display:'Inter',-apple-system,Helvetica Neue,Arial,sans-serif;
+  --ff-mono:'JetBrains Mono',ui-monospace,SF Mono,Menlo,monospace;
+
+  --r-xs:3px;
+  --r-sm:4px;
+  --r-md:8px;
+  --r-full:9999px;
+
+  --sp-xs:4px;
+  --sp-sm:8px;
+  --sp-md:12px;
+  --sp-lg:16px;
+  --sp-xl:20px;
+  --sp-2xl:24px;
+  --sp-3xl:32px;
+  --sp-4xl:44px;
+  --sp-5xl:48px;
+  --sp-section:88px;
+
+  --max:1280px;
+}
+
+body{
+  font-family:var(--ff-display);
+  color:var(--ink);
+  background:var(--canvas);
+  -webkit-font-smoothing:antialiased;
+  font-size:16px;
+  line-height:1.5;
+}
+
+:focus-visible{outline:2px solid var(--periwinkle);outline-offset:3px;}
+
+.wrap{max-width:var(--max);margin:0 auto;padding:0 32px;}
+
+/* ============ TYPE SCALE ============ */
+.eyebrow{
+  font-family:var(--ff-mono);
+  font-weight:500;
+  font-size:11px;
+  line-height:11px;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+.display-xxl{font-family:var(--ff-display);font-weight:500;font-size:clamp(34px,6.4vw,64px);line-height:1.08;letter-spacing:-.03em;}
+.display-xl{font-family:var(--ff-display);font-weight:500;font-size:clamp(26px,4.2vw,40px);line-height:1.16;letter-spacing:-.02em;}
+.display-lg{font-family:var(--ff-display);font-weight:500;font-size:clamp(20px,2.8vw,28px);line-height:1.18;letter-spacing:-.015em;}
+.display-md{font-family:var(--ff-display);font-weight:600;font-size:22px;line-height:1.18;letter-spacing:-.01em;}
+.body-lg{font-size:18px;line-height:1.55;letter-spacing:-.01em;color:#2b2b2b;}
+.body-md{font-size:16px;line-height:1.55;letter-spacing:-.01em;color:#3a3a3a;}
+.caption{font-size:14px;line-height:1.4;color:var(--body);}
+.mono-btn{font-family:var(--ff-mono);font-weight:500;font-size:14px;letter-spacing:.04em;text-transform:uppercase;}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+
+/* ============ BUTTONS ============ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:var(--ff-mono);font-weight:500;font-size:13px;letter-spacing:.06em;text-transform:uppercase;
+  padding:13px 26px;border-radius:var(--r-sm);text-decoration:none;border:1px solid transparent;
+  cursor:pointer;transition:transform .15s ease,background .2s ease,border-color .2s ease,color .2s ease;
+  white-space:nowrap;
+}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:var(--ink);color:#fff;}
+.btn-primary:hover{background:#1a1a1a;}
+.btn-mint{background:var(--mint);color:var(--ink);}
+.btn-mint:hover{background:#b3eef2;}
+.btn-white{background:var(--canvas);color:var(--ink);}
+.btn-white:hover{background:#f2f2f2;}
+.btn-ghost-dark{background:var(--surface-soft-2);color:#fff;}
+.btn-ghost-dark:hover{background:#3c4250;}
+.btn-outline{background:var(--canvas);color:var(--ink);border:1px solid var(--hairline);border-radius:var(--r-xs);}
+.btn-outline:hover{border-color:var(--ink);}
+.btn-block{width:100%;}
+
+/* ============ NAVBAR ============ */
+.navbar{
+  position:sticky;top:0;z-index:200;background:var(--canvas-dark);
+  border-bottom:1px solid var(--hairline-on-dark);
+}
+.nav-inner{
+  max-width:var(--max);margin:0 auto;padding:0 32px;
+  height:68px;display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.brand{display:flex;flex-direction:column;justify-content:center;text-decoration:none;}
+.brand-name{font-weight:600;font-size:19px;color:#fff;letter-spacing:-.01em;}
+.brand-sub{font-family:var(--ff-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark-dim);margin-top:1px;}
+
+.nav-links{display:flex;align-items:center;gap:36px;}
+.nav-links a{
+  color:#fff;font-size:14.5px;text-decoration:none;position:relative;padding:4px 0;
+}
+.nav-links a::after{
+  content:'';position:absolute;left:0;right:0;bottom:-3px;height:1px;background:#fff;
+  transform:scaleX(0);transform-origin:left;transition:transform .25s ease;
+}
+.nav-links a:hover::after{transform:scaleX(1);}
+
+.nav-cta{display:flex;align-items:center;gap:10px;}
+.nav-toggle-input{display:none;}
+.nav-toggle-btn{display:none;width:32px;height:32px;align-items:center;justify-content:center;cursor:pointer;}
+.nav-toggle-btn span,.nav-toggle-btn span::before,.nav-toggle-btn span::after{
+  content:'';display:block;width:20px;height:2px;background:#fff;position:relative;transition:transform .2s ease,opacity .2s ease;
+}
+.nav-toggle-btn span::before{position:absolute;top:-6px;}
+.nav-toggle-btn span::after{position:absolute;top:6px;}
+
+/* ============ HERO ============ */
+.hero{background:var(--canvas-dark);color:#fff;position:relative;overflow:hidden;}
+.hero-inner{
+  max-width:var(--max);margin:0 auto;padding:var(--sp-section) 32px 64px;
+  display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;
+}
+.hero-eyebrow{color:var(--periwinkle);margin-bottom:18px;display:inline-block;}
+.hero h1{margin-bottom:20px;}
+.hero p.body-lg{color:#cfcfe0;max-width:480px;margin-bottom:32px;}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;}
+
+.ribbon{
+  position:relative;aspect-ratio:1/0.85;border-radius:var(--r-md);overflow:hidden;
+  background:#05051a;
+}
+.ribbon::before{
+  content:'';position:absolute;inset:-20%;
+  background:
+    radial-gradient(circle at 28% 30%, var(--orange) 0%, transparent 42%),
+    radial-gradient(circle at 70% 24%, var(--magenta) 0%, transparent 46%),
+    radial-gradient(circle at 56% 78%, var(--periwinkle) 0%, transparent 50%);
+  filter:blur(46px) saturate(1.3);
+  opacity:.85;
+  animation:driftRibbon 14s ease-in-out infinite alternate;
+}
+@keyframes driftRibbon{
+  from{transform:translate(0,0) scale(1);}
+  to{transform:translate(2%,-3%) scale(1.06);}
+}
+
+/* ============ TRUST STRIP ============ */
+.trust{background:var(--canvas);border-bottom:1px solid var(--hairline);}
+.trust-inner{
+  max-width:var(--max);margin:0 auto;padding:22px 32px;
+  display:flex;flex-wrap:wrap;gap:14px;justify-content:center;
+}
+.chip{
+  font-family:var(--ff-mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+  background:var(--canvas);border:1px solid var(--hairline);color:#3a3a3a;
+  padding:8px 16px;border-radius:var(--r-sm);
+}
+
+/* ============ SECTION SHELLS ============ */
+.section{padding:var(--sp-section) 32px;}
+.section-dark{background:var(--canvas-dark);color:#fff;}
+.section-head{max-width:640px;margin-bottom:48px;}
+.section-head .eyebrow{display:block;margin-bottom:14px;}
+.section-dark .eyebrow{color:var(--periwinkle);}
+.section:not(.section-dark) .eyebrow{color:var(--body);}
+.section-head h2{margin-bottom:14px;}
+.section-head p{color:var(--body);}
+.section-dark .section-head p{color:var(--on-dark-dim);}
+
+/* reveal on scroll */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.is-visible{opacity:1;transform:translateY(0);}
+
+/* ============ PRODUCT GRID ============ */
+.product-grid{
+  max-width:var(--max);margin:0 auto;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+}
+.product-card{
+  background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-sm);
+  overflow:hidden;display:flex;flex-direction:column;
+  transition:transform .25s ease,border-color .25s ease;
+}
+.product-card:hover{transform:translateY(-5px);border-color:#cfcfcf;}
+.product-media{position:relative;aspect-ratio:16/10;overflow:hidden;background:#f4f4f4;}
+.product-media img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+.product-card:hover .product-media img{transform:scale(1.05);}
+.product-tag{
+  position:absolute;top:14px;left:14px;
+  font-family:var(--ff-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  background:rgba(255,255,255,.92);color:var(--ink);padding:5px 10px;border-radius:var(--r-sm);
+}
+.product-body{padding:24px;display:flex;flex-direction:column;flex:1;}
+.product-title{margin-bottom:8px;}
+.product-desc{margin-bottom:18px;font-size:14.5px;line-height:1.55;color:#555;}
+
+.price-table{width:100%;border-collapse:collapse;margin-bottom:8px;}
+.price-table .grp td{
+  padding-top:14px;padding-bottom:6px;
+  font-family:var(--ff-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--body);
+}
+.price-table tr:not(.grp) td{
+  padding:7px 0;font-size:14px;border-bottom:1px solid var(--hairline);color:#2b2b2b;
+}
+.price-table tr:not(.grp) td:last-child{
+  text-align:right;font-weight:600;font-family:var(--ff-mono);font-size:13.5px;
+}
+
+.feature-list{margin-bottom:18px;}
+.feature-list li{
+  position:relative;padding:6px 0 6px 16px;font-size:14px;color:#2b2b2b;border-bottom:1px solid var(--hairline);
+}
+.feature-list li::before{
+  content:'';position:absolute;left:0;top:15px;width:5px;height:5px;border-radius:50%;background:var(--ink);
+}
+
+.price-row{display:flex;gap:10px;margin-bottom:20px;}
+.price-chip{flex:1;border:1px solid var(--hairline);border-radius:var(--r-sm);padding:14px 14px;}
+.price-chip .pc-label{font-family:var(--ff-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--body);margin-bottom:6px;}
+.price-chip .pc-amount{font-weight:600;font-size:24px;letter-spacing:-.02em;}
+.price-chip .pc-unit{font-size:11.5px;color:var(--body);margin-top:2px;}
+
+.product-cta{margin-top:auto;}
+
+/* ============ REASON CARDS (dark) ============ */
+.reason-grid{
+  max-width:var(--max);margin:0 auto;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+}
+.reason-card{
+  border:1px solid var(--hairline-on-dark);border-radius:var(--r-sm);padding:28px;
+  transition:border-color .25s ease,background .25s ease;
+}
+.reason-card:hover{border-color:rgba(255,255,255,.32);background:rgba(255,255,255,.02);}
+.reason-card .eyebrow{color:var(--periwinkle);display:block;margin-bottom:16px;}
+.reason-card h3{margin-bottom:10px;}
+.reason-card p{color:var(--on-dark-dim);font-size:14.5px;line-height:1.6;}
+
+/* ============ STEPS ============ */
+.steps{
+  max-width:var(--max);margin:0 auto;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+}
+.step{border-top:1px solid var(--ink);padding-top:18px;}
+.step-num{font-family:var(--ff-mono);font-size:11px;letter-spacing:.08em;color:var(--body);margin-bottom:14px;display:block;}
+.step h3{margin-bottom:8px;}
+.step p{color:var(--body);font-size:14.5px;line-height:1.55;}
+
+/* ============ CONTACT ============ */
+.contact-grid{
+  max-width:var(--max);margin:0 auto;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;
+}
+.contact-card{
+  display:block;border:1px solid var(--hairline);border-radius:var(--r-sm);padding:22px;text-decoration:none;color:var(--ink);
+  transition:border-color .2s ease,transform .2s ease;
+}
+.contact-card:hover{border-color:var(--ink);transform:translateY(-3px);}
+.contact-platform{font-family:var(--ff-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--body);margin-bottom:10px;}
+.contact-value{font-weight:600;font-size:17px;letter-spacing:-.01em;margin-bottom:14px;word-break:break-word;}
+.contact-cta{font-family:var(--ff-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);display:inline-flex;align-items:center;gap:6px;}
+.contact-cta svg{width:11px;height:11px;transition:transform .2s ease;}
+.contact-card:hover .contact-cta svg{transform:translateX(3px);}
+
+/* ============ FOOTER ============ */
+footer{background:var(--canvas);}
+.footer-top{
+  max-width:var(--max);margin:0 auto;padding:64px 32px 40px;
+  display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;border-top:1px solid var(--hairline);
+}
+.footer-brand-name{font-weight:600;font-size:22px;margin-bottom:10px;}
+.footer-tagline{color:var(--body);font-size:14px;max-width:280px;line-height:1.5;}
+.footer-col-label{font-family:var(--ff-mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--body);margin-bottom:16px;}
+.footer-col a{display:block;font-size:14.5px;color:#2b2b2b;text-decoration:none;margin-bottom:10px;}
+.footer-col a:hover{color:var(--ink);text-decoration:underline;}
+.footer-bottom{
+  max-width:var(--max);margin:0 auto;padding:20px 32px 40px;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+  border-top:1px solid var(--hairline);
+}
+.footer-bottom .caption{color:var(--body);}
+
+.wordmark-banner{
+  width:100%;overflow:hidden;border-top:1px solid var(--hairline);padding:14px 0 0;
+}
+.wordmark-banner span{
+  display:block;text-align:center;font-weight:700;letter-spacing:-.04em;
+  font-size:clamp(58px,14vw,168px);line-height:1;color:#efefef;white-space:nowrap;
+}
+
+/* ============ FAB ============ */
+.fab{
+  position:fixed;right:24px;bottom:24px;z-index:300;
+  width:56px;height:56px;border-radius:var(--r-full);background:var(--ink);color:#fff;
+  display:flex;align-items:center;justify-content:center;text-decoration:none;
+  box-shadow:rgba(1,1,32,0.18) 0px 6px 16px 0px;
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.fab:hover{transform:translateY(-2px);box-shadow:rgba(1,1,32,0.24) 0px 10px 20px 0px;}
+.fab svg{width:24px;height:24px;}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:980px){
+  .hero-inner{grid-template-columns:1fr;gap:36px;padding-top:56px;}
+  .ribbon{aspect-ratio:16/9;}
+  .product-grid{grid-template-columns:repeat(2,1fr);}
+  .reason-grid{grid-template-columns:1fr;}
+  .steps{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:760px){
+  .nav-links{
+    position:fixed;top:68px;left:0;right:0;bottom:0;background:var(--canvas-dark);
+    flex-direction:column;align-items:flex-start;gap:0;padding:8px 32px 32px;
+    display:none;
+  }
+  .nav-links a{width:100%;padding:14px 0;border-bottom:1px solid var(--hairline-on-dark);font-size:16px;}
+  .nav-toggle-input:checked ~ .nav-links{display:flex;}
+  .nav-toggle-btn{display:flex;}
+  .nav-cta .btn-outline{display:none;}
+  .section{padding:64px 20px;}
+  .wrap,.nav-inner,.hero-inner,.trust-inner,.product-grid,.reason-grid,.steps,.contact-grid,.footer-top,.footer-bottom{padding-left:20px;padding-right:20px;}
+  .hero-inner,.product-grid,.reason-grid,.steps,.contact-grid,.footer-top,.footer-bottom{max-width:100%;}
+}
+@media(max-width:600px){
+  .product-grid{grid-template-columns:1fr;}
+  .price-row{flex-direction:column;}
+  .footer-top{grid-template-columns:1fr;gap:28px;}
+}
+</style>
 </head>
 <body>
 
-<!-- ANNOUNCEMENT BAR -->
-<div class="annc-bar">
-  Open for order &mdash; hubungi via WhatsApp atau Telegram untuk pemesanan
-</div>
+<!-- ============ NAVBAR ============ -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="#top" class="brand">
+      <span class="brand-name">Artoria</span>
+      <span class="brand-sub">Your Highness</span>
+    </a>
 
-<!-- TOP NAV -->
-<nav class="nav-top">
-  <div class="nav-top-inner">
-    <span class="nav-date">Est. 2024 &nbsp;/&nbsp; Artoria Shop</span>
+    <input type="checkbox" id="navToggle" class="nav-toggle-input" />
+    <label for="navToggle" class="nav-toggle-btn" aria-label="Buka menu"><span></span></label>
+
     <ul class="nav-links">
-      <li><a href="#" onclick="showPage('home'); return false;"><span class="nav-text">Beranda</span></a></li>
-      <li><a href="#" onclick="showPage('products'); return false;"><span class="nav-text">Produk</span></a></li>
-      <li><a href="#" onclick="showPage('contact'); return false;"><span class="nav-text">Kontak</span></a></li>
+      <li><a href="#top">Beranda</a></li>
+      <li><a href="#produk">Produk</a></li>
+      <li><a href="#kontak">Kontak</a></li>
     </ul>
-    <span class="nav-contact">WA: 085706606594</span>
+
+    <div class="nav-cta">
+      <a href="#kontak" class="btn btn-outline">Kontak</a>
+      <a href="https://wa.me/6285607588713?text=Halo%2C%20saya%20mau%20order" target="_blank" rel="noopener" class="btn btn-primary">Order</a>
+    </div>
   </div>
 </nav>
 
-<!-- MASTHEAD -->
-<div class="masthead">
-  <div class="masthead-rule-top"></div>
-  <p class="masthead-eyebrow">Vol. I &nbsp;&nbsp; Edisi Digital &nbsp;&nbsp; artoria.dev</p>
-  <h1 class="masthead-title">Artoria</h1>
-  <p class="masthead-slogan">Your Highness</p>
-  <div class="masthead-rule-bottom"></div>
-</div>
+<!-- ============ HERO ============ -->
+<header id="top" class="hero">
+  <div class="hero-inner">
+    <div class="reveal">
+      <span class="eyebrow hero-eyebrow">Toko digital personal</span>
+      <h1 class="display-xxl">Bot, panel, dan script yang siap pakai hari ini</h1>
+      <p class="body-lg">Tiga produk, harga jelas dari awal. Pilih yang kamu butuhin, lalu hubungi kami lewat WhatsApp atau Telegram untuk order.</p>
+      <div class="hero-ctas">
+        <a href="https://wa.me/6285607588713?text=Halo%2C%20saya%20mau%20order" target="_blank" rel="noopener" class="btn btn-mint">Order via WhatsApp</a>
+        <a href="#produk" class="btn btn-ghost-dark">Lihat Produk</a>
+      </div>
+    </div>
+    <div class="ribbon reveal" aria-hidden="true"></div>
+  </div>
+</header>
 
-<!-- TICKER -->
-<div class="ticker-wrap">
-  <div class="ticker-label">Terbaru</div>
-  <div class="ticker-track">
-    <span>Bot WhatsApp &mdash; Sewa mulai <strong>3k/hari</strong></span>
-    <span>Panel Pterodactyl &mdash; Dari <strong>2k</strong> hingga Admin Panel</span>
-    <span>Script Neko-Arc &mdash; Full update hanya <strong>30k</strong></span>
-    <span>Hubungi kami via <strong>Telegram @jinkasei</strong></span>
-    <span>Bot WhatsApp &mdash; Sewa mulai <strong>3k/hari</strong></span>
-    <span>Panel Pterodactyl &mdash; Dari <strong>2k</strong> hingga Admin Panel</span>
-    <span>Script Neko-Arc &mdash; Full update hanya <strong>30k</strong></span>
-    <span>Hubungi kami via <strong>Telegram @jinkasei</strong></span>
+<!-- ============ TRUST STRIP ============ -->
+<div class="trust">
+  <div class="trust-inner">
+    <span class="chip">Dibalas langsung oleh pemilik</span>
+    <span class="chip">Harga sudah final</span>
+    <span class="chip">Pembayaran dicek dulu sebelum kirim</span>
   </div>
 </div>
 
-<!-- ===================== PAGE: HOME ===================== -->
-<div id="page-home" class="page-section active">
-  <div class="hero-strip">
-    <div class="hero-col">
-      <div class="hero-tag">Layanan</div>
-      <h2>Apa yang Kami Tawarkan</h2>
-      <p>Dari bot WhatsApp siap pakai hingga panel hosting dan script custom, semua tersedia dengan harga yang masuk akal.</p>
-    </div>
-    <div class="hero-divider"></div>
-    <div class="hero-col hero-main">
-      <h1>Tools Digital untuk Kebutuhan Anda</h1>
-      <p>Artoria menyediakan layanan sewa bot, panel server, dan script bot WhatsApp yang siap digunakan maupun dikustomisasi. Cocok untuk personal maupun kebutuhan bisnis kecil.</p>
-    </div>
-    <div class="hero-divider"></div>
-    <div class="hero-col">
-      <div class="hero-tag">Info</div>
-      <h2>Cara Order</h2>
-      <p>Pilih produk yang diinginkan, lalu hubungi via WhatsApp atau Telegram. Pembayaran dan pengiriman dikonfirmasi langsung.</p>
-    </div>
+<!-- ============ PRODUCTS ============ -->
+<section id="produk" class="section">
+  <div class="section-head reveal">
+    <span class="eyebrow">Produk</span>
+    <h2 class="display-xl">Tiga produk yang bisa kamu pesan sekarang</h2>
+    <p class="body-md">Semua harga di bawah ini sudah final, tinggal pilih sesuai kebutuhan kamu.</p>
   </div>
 
-  <div class="main-wrapper">
+  <div class="product-grid">
 
-    <div class="section-header">
-      <h2>Produk Unggulan</h2>
-      <div class="rule-fill"></div>
-      <span class="section-num">3 Kategori</span>
-    </div>
-
-    <div class="featured-row">
-      <div class="featured-item" onclick="showPage('products')">
-        <div class="fi-num">Layanan 01</div>
-        <div class="fi-name">Sewa Bot WhatsApp</div>
-        <div class="fi-rule"></div>
-        <div class="fi-from">Mulai dari</div>
-        <div class="fi-price">Rp 3.000</div>
+    <!-- SEWA BOT WHATSAPP -->
+    <article class="product-card reveal">
+      <div class="product-media">
+        <img src="assets/sewa-bot.jpg" alt="Sewa Bot WhatsApp Artoria" loading="lazy" />
+        <span class="product-tag">Sewa Bot</span>
       </div>
-      <div class="featured-item" onclick="showPage('products')">
-        <div class="fi-num">Layanan 02</div>
-        <div class="fi-name">Panel Pterodactyl</div>
-        <div class="fi-rule"></div>
-        <div class="fi-from">Mulai dari</div>
-        <div class="fi-price">Rp 2.000</div>
-      </div>
-      <div class="featured-item" onclick="showPage('products')">
-        <div class="fi-num">Layanan 03</div>
-        <div class="fi-name">Script Neko-Arc</div>
-        <div class="fi-rule"></div>
-        <div class="fi-from">Mulai dari</div>
-        <div class="fi-price">Rp 20.000</div>
-      </div>
-    </div>
-
-    <!-- CTA buttons on home -->
-    <div class="btn-group" style="margin-top: 28px;">
-      <a href="https://wa.me/6285706606594" target="_blank" class="btn-order">
-        <span>Order Sekarang</span>
-        <i class="btn-arrow">&#8594;</i>
-      </a>
-      <div class="btn-ghost-wrap">
-        <span class="bc-tr"></span>
-        <span class="bc-bl"></span>
-        <a href="#" onclick="showPage('products'); return false;" class="btn-ghost">Lihat Produk</a>
-      </div>
-    </div>
-
-    <div class="highlight-box" style="margin-top: 36px;">
-      <p>"Layanan terjangkau, produk fungsional, dan dukungan langsung dari pemilik."</p>
-    </div>
-
-    <div class="about-block" style="margin-top: 36px;">
-      <div>
-        <h2>Artoria, Siapa Kami</h2>
-        <div class="columns-2">
-          <p>Artoria adalah toko digital kecil yang dikelola secara personal, fokus pada layanan berbasis teknologi WhatsApp dan hosting ringan. Kami tidak menjual janji besar, hanya produk yang benar-benar bisa digunakan.</p>
-          <p>Setiap pesanan ditangani langsung oleh pemilik, sehingga komunikasi lebih cepat dan responsif. Tidak ada agen perantara, tidak ada waktu tunggu panjang.</p>
-        </div>
-        <div class="btn-group" style="margin-top: 20px;">
-          <a href="#" onclick="showPage('contact'); return false;" class="btn-stamp">Hubungi Kami</a>
-        </div>
-      </div>
-      <div class="about-sidebar">
-        <div class="aside-label">Platform Kontak</div>
-        <ul class="aside-list">
-          <li>WhatsApp</li>
-          <li>Telegram</li>
-          <li>Instagram</li>
-          <li>Github</li>
-          <li>Gmail</li>
-        </ul>
-        <br>
-        <div class="stamp">Open Order</div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ===================== PAGE: PRODUCTS ===================== -->
-<div id="page-products" class="page-section">
-  <div class="main-wrapper">
-
-    <div class="section-header">
-      <h2>Daftar Produk</h2>
-      <div class="rule-fill"></div>
-      <span class="section-num">Katalog Lengkap</span>
-    </div>
-
-    <div class="product-grid">
-
-      <!-- PRODUCT 1: BOT WA -->
-      <div class="product-card">
-        <div class="product-card-label">Sewa</div>
-        <h3>Bot WhatsApp</h3>
-        <p style="font-size:12px; margin-bottom:14px; color:#5a4a3a;">Bot siap pakai, aktif selama masa sewa, cocok untuk personal maupun komunitas.</p>
+      <div class="product-body">
+        <h3 class="product-title display-md">Sewa Bot WhatsApp</h3>
+        <p class="product-desc">Bot yang sudah aktif dan tinggal kamu pakai. Sewa sesuai durasi, dari harian sampai bulanan.</p>
 
         <table class="price-table">
-          <tr class="pt-group-label"><td colspan="2">List Sewa</td></tr>
+          <tr class="grp"><td colspan="2">Reguler</td></tr>
           <tr><td>Per Hari</td><td>Rp 3.000</td></tr>
           <tr><td>Per Minggu</td><td>Rp 8.000</td></tr>
           <tr><td>Per Bulan</td><td>Rp 13.000</td></tr>
-          <tr class="pt-group-label"><td colspan="2">Premium User</td></tr>
+          <tr class="grp"><td colspan="2">Premium User</td></tr>
           <tr><td>Per Minggu</td><td>Rp 5.000</td></tr>
           <tr><td>Per Bulan</td><td>Rp 10.000</td></tr>
         </table>
 
-        <!-- ink flood button -->
-        <a href="https://wa.me/6285706606594?text=Halo,%20saya%20mau%20order%20Sewa%20Bot%20WhatsApp" class="btn-order" target="_blank">
-          <span>Order via WA</span>
-          <i class="btn-arrow">&#8594;</i>
-        </a>
+        <a href="https://wa.me/6285607588713?text=Halo%2C%20saya%20mau%20order%20Sewa%20Bot%20WhatsApp" target="_blank" rel="noopener" class="btn btn-primary btn-block product-cta">Order via WhatsApp</a>
       </div>
+    </article>
 
-      <!-- PRODUCT 2: PANEL -->
-      <div class="product-card">
-        <div class="product-card-label">Panel</div>
-        <h3>Panel Pterodactyl</h3>
-        <p style="font-size:12px; margin-bottom:14px; color:#5a4a3a;">Slot server dengan berbagai kapasitas RAM. Ideal untuk menjalankan bot atau aplikasi ringan.</p>
+    <!-- PANEL PTERODACTYL -->
+    <article class="product-card reveal">
+      <div class="product-media">
+        <img src="assets/panel.jpg" alt="Panel Pterodactyl Artoria" loading="lazy" />
+        <span class="product-tag">Panel Server</span>
+      </div>
+      <div class="product-body">
+        <h3 class="product-title display-md">Panel Pterodactyl</h3>
+        <p class="product-desc">Slot panel dengan pilihan kapasitas RAM. Cocok buat jalanin bot atau aplikasi ringan.</p>
 
         <table class="price-table">
-          <tr class="pt-group-label"><td colspan="2">Pilihan RAM</td></tr>
+          <tr class="grp"><td colspan="2">Pilihan RAM</td></tr>
           <tr><td>1 GB</td><td>Rp 2.000</td></tr>
           <tr><td>2 GB</td><td>Rp 4.000</td></tr>
           <tr><td>3 GB</td><td>Rp 6.000</td></tr>
           <tr><td>4 GB</td><td>Rp 8.000</td></tr>
           <tr><td>5 GB</td><td>Rp 10.000</td></tr>
           <tr><td>Unlimited</td><td>Rp 12.000</td></tr>
-          <tr class="pt-group-label"><td colspan="2">Akses Khusus</td></tr>
+          <tr class="grp"><td colspan="2">Akses Khusus</td></tr>
           <tr><td>Reseller</td><td>Rp 15.000</td></tr>
           <tr><td>Admin Panel</td><td>Rp 25.000</td></tr>
         </table>
 
-        <!-- typewrite swap button -->
-        <a href="https://wa.me/6285706606594?text=Halo,%20saya%20mau%20order%20Panel%20Pterodactyl" class="btn-typewrite" target="_blank">
-          <span class="tw-default">Order via WA</span>
-          <span class="tw-hover">Hubungi Sekarang</span>
-        </a>
+        <a href="https://wa.me/6285607588713?text=Halo%2C%20saya%20mau%20order%20Panel%20Pterodactyl" target="_blank" rel="noopener" class="btn btn-primary btn-block product-cta">Order via WhatsApp</a>
       </div>
+    </article>
 
-      <!-- PRODUCT 3: SCRIPT -->
-      <div class="product-card">
-        <div class="product-card-label">Script</div>
-        <h3>Script Neko-Arc</h3>
-        <p style="font-size:12px; margin-bottom:14px; color:#5a4a3a;">Script bot WhatsApp custom dengan tampilan bersih dan fitur yang bisa langsung dipakai.</p>
+    <!-- SCRIPT NEKO ARC -->
+    <article class="product-card reveal">
+      <div class="product-media">
+        <img src="assets/script-bot.jpg" alt="Script Neko Arc Artoria" loading="lazy" />
+        <span class="product-tag">Script Bot</span>
+      </div>
+      <div class="product-body">
+        <h3 class="product-title display-md">Script Neko Arc</h3>
+        <p class="product-desc">Script bot WhatsApp open source dengan tampilan rapi, gampang dipasang dan dikustomisasi sendiri.</p>
 
         <ul class="feature-list">
-          <li>UI sederhana dan rapi</li>
+          <li>UI bersih dan rapi</li>
           <li>Tombol interaktif</li>
           <li>API key gratis</li>
-          <li>Mudah dikustomisasi</li>
-          <li>Tanpa enkripsi (open source)</li>
+          <li>Open source, bebas dimodifikasi</li>
         </ul>
 
-        <div class="price-badge">
-          <div class="from">Tanpa Update</div>
-          <div class="amount">20k</div>
-          <div class="unit">sekali bayar</div>
-        </div>
-        <br>
-        <div class="price-badge">
-          <div class="from">Full Update</div>
-          <div class="amount">30k</div>
-          <div class="unit">update selamanya</div>
-        </div>
-
-        <div class="btn-group">
-          <!-- torn paper button -->
-          <a href="https://wa.me/6285706606594?text=Halo,%20saya%20mau%20order%20Script%20Neko-Arc" class="btn-rip" target="_blank">Order Script</a>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- button showcase section -->
-    <div class="btn-showcase">
-      <div class="btn-showcase-title">Cara Order &mdash; Pilih Platform</div>
-      <div class="btn-group">
-        <a href="https://wa.me/6285706606594" target="_blank" class="btn-order">
-          <span>WhatsApp</span>
-          <i class="btn-arrow">&#8594;</i>
-        </a>
-        <div class="btn-ghost-wrap">
-          <span class="bc-tr"></span>
-          <span class="bc-bl"></span>
-          <a href="https://t.me/jinkasei" target="_blank" class="btn-ghost">Telegram</a>
-        </div>
-        <a href="mailto:halfyzodiac@gmail.com" class="btn-stamp">Email</a>
-        <a href="#" onclick="showPage('contact'); return false;" class="btn-outline-fill"><span>Semua Kontak</span></a>
-      </div>
-    </div>
-
-    <div class="highlight-box">
-      <p>"Semua harga sudah final. Tidak ada biaya tambahan tersembunyi."</p>
-    </div>
-
-    <div class="note-box">
-      <div class="note-box-label">Catatan Pemesanan</div>
-      <p>Pembayaran dikonfirmasi terlebih dahulu sebelum produk dikirim. Untuk pertanyaan teknis atau negosiasi paket, silakan hubungi langsung via Telegram atau WhatsApp.</p>
-    </div>
-
-  </div>
-</div>
-
-<!-- ===================== PAGE: CONTACT ===================== -->
-<div id="page-contact" class="page-section">
-  <div class="main-wrapper">
-
-    <div class="section-header">
-      <h2>Hubungi Kami</h2>
-      <div class="rule-fill"></div>
-      <span class="section-num">5 Platform</span>
-    </div>
-
-    <p style="font-size: 13.5px; line-height: 1.75; margin-bottom: 28px; color: #3a2a1a; max-width: 600px;">
-      Pilih platform yang paling nyaman untuk Anda. Respons paling cepat biasanya melalui WhatsApp atau Telegram.
-    </p>
-
-    <div class="contact-grid">
-      <a href="https://wa.me/6285706606594" target="_blank" class="contact-card">
-        <div class="contact-card-platform">WhatsApp</div>
-        <div class="contact-card-value">085706606594</div>
-        <div class="contact-card-cta">Kirim pesan</div>
-      </a>
-      <a href="https://t.me/jinkasei" target="_blank" class="contact-card">
-        <div class="contact-card-platform">Telegram</div>
-        <div class="contact-card-value">@jinkasei</div>
-        <div class="contact-card-cta">Buka Telegram</div>
-      </a>
-      <a href="https://instagram.com/kersenify666" target="_blank" class="contact-card">
-        <div class="contact-card-platform">Instagram</div>
-        <div class="contact-card-value">@kersenify666</div>
-        <div class="contact-card-cta">Lihat profil</div>
-      </a>
-      <a href="https://github.com/Mirai-Kanade" target="_blank" class="contact-card">
-        <div class="contact-card-platform">Github</div>
-        <div class="contact-card-value">Mirai-Kanade</div>
-        <div class="contact-card-cta">Lihat repository</div>
-      </a>
-      <a href="mailto:halfyzodiac@gmail.com" class="contact-card">
-        <div class="contact-card-platform">Gmail</div>
-        <div class="contact-card-value">halfyzodiac@gmail.com</div>
-        <div class="contact-card-cta">Kirim email</div>
-      </a>
-    </div>
-
-    <!-- quick action buttons on contact page -->
-    <div class="btn-group" style="margin-bottom: 36px;">
-      <a href="https://wa.me/6285706606594" target="_blank" class="btn-order">
-        <span>Buka WhatsApp</span>
-        <i class="btn-arrow">&#8594;</i>
-      </a>
-      <a href="https://t.me/jinkasei" target="_blank" class="btn-typewrite">
-        <span class="tw-default">Buka Telegram</span>
-        <span class="tw-hover">@jinkasei</span>
-      </a>
-      <a href="https://github.com/Mirai-Kanade" target="_blank" class="btn-stamp">Github</a>
-    </div>
-
-    <div class="about-block">
-      <div>
-        <h2>Jam Operasional</h2>
-        <div class="columns-2">
-          <p>Artoria dikelola secara personal, sehingga respons mungkin tidak selalu instan. Namun kami selalu berusaha membalas dalam 1x24 jam di hari aktif.</p>
-          <p>Untuk keperluan mendesak, Telegram adalah pilihan terbaik. Untuk order standar, WhatsApp sudah lebih dari cukup.</p>
-        </div>
-        <div class="btn-group" style="margin-top: 20px;">
-          <div class="btn-ghost-wrap">
-            <span class="bc-tr"></span>
-            <span class="bc-bl"></span>
-            <a href="#" onclick="showPage('products'); return false;" class="btn-ghost">Lihat Produk</a>
+        <div class="price-row">
+          <div class="price-chip">
+            <div class="pc-label">Tanpa Update</div>
+            <div class="pc-amount">20k</div>
+            <div class="pc-unit">Sekali bayar</div>
           </div>
-          <a href="#" onclick="showPage('home'); return false;" class="btn-outline-fill"><span>Kembali ke Beranda</span></a>
+          <div class="price-chip">
+            <div class="pc-label">Full Update</div>
+            <div class="pc-amount">30k</div>
+            <div class="pc-unit">Update selamanya</div>
+          </div>
         </div>
+
+        <a href="https://wa.me/6285607588713?text=Halo%2C%20saya%20mau%20order%20Script%20Neko%20Arc" target="_blank" rel="noopener" class="btn btn-primary btn-block product-cta">Order Script</a>
       </div>
-      <div class="about-sidebar">
-        <div class="aside-label">Status</div>
-        <ul class="aside-list">
-          <li>Order: Terbuka</li>
-          <li>Respons: 1-12 jam</li>
-          <li>Bahasa: Indonesia</li>
-        </ul>
-        <br>
-        <div class="stamp">Aktif</div>
-      </div>
-    </div>
+    </article>
 
   </div>
-</div>
+</section>
 
-<!-- FOOTER -->
+<!-- ============ WHY ORDER HERE (DARK) ============ -->
+<section class="section section-dark">
+  <div class="section-head reveal">
+    <span class="eyebrow">Alasan</span>
+    <h2 class="display-xl">Kenapa banyak yang order di sini</h2>
+  </div>
+
+  <div class="reason-grid">
+    <div class="reason-card reveal">
+      <span class="eyebrow">Pembayaran</span>
+      <h3 class="display-md">Dicek dulu, baru kirim</h3>
+      <p>Kamu transfer, kami cek, baru produk dikirim. Semua jelas dari awal sampai akhir.</p>
+    </div>
+    <div class="reason-card reveal">
+      <span class="eyebrow">Respon</span>
+      <h3 class="display-md">Dibalas sama pemiliknya</h3>
+      <p>Tidak ada admin berlapis. Pesan kamu langsung dibaca dan dibalas oleh yang pegang toko ini.</p>
+    </div>
+    <div class="reason-card reveal">
+      <span class="eyebrow">Harga</span>
+      <h3 class="display-md">Sudah final sejak awal</h3>
+      <p>Harga yang tertera itu yang kamu bayar. Tidak ada biaya tambahan yang muncul belakangan.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STEPS ============ -->
+<section class="section">
+  <div class="section-head reveal">
+    <span class="eyebrow">Cara order</span>
+    <h2 class="display-xl">Tiga langkah, selesai</h2>
+  </div>
+
+  <div class="steps">
+    <div class="step reveal">
+      <span class="step-num">01</span>
+      <h3 class="display-md">Pilih produk</h3>
+      <p>Tentuin produk dan paket yang sesuai sama kebutuhan kamu.</p>
+    </div>
+    <div class="step reveal">
+      <span class="step-num">02</span>
+      <h3 class="display-md">Hubungi kami</h3>
+      <p>Chat lewat WhatsApp atau Telegram, sebutin produk yang kamu mau.</p>
+    </div>
+    <div class="step reveal">
+      <span class="step-num">03</span>
+      <h3 class="display-md">Bayar dan terima</h3>
+      <p>Setelah pembayaran dicek, produk langsung kami kirim ke kamu.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="kontak" class="section">
+  <div class="section-head reveal">
+    <span class="eyebrow">Kontak</span>
+    <h2 class="display-xl">Pilih platform yang paling nyaman buat kamu</h2>
+    <p class="body-md">Paling cepat dibalas lewat WhatsApp atau Telegram.</p>
+  </div>
+
+  <div class="contact-grid">
+    <a href="https://wa.me/6285607588713" target="_blank" rel="noopener" class="contact-card reveal">
+      <div class="contact-platform">WhatsApp</div>
+      <div class="contact-value">085607588713</div>
+      <div class="contact-cta">Kirim pesan <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5"/></svg></div>
+    </a>
+    <a href="https://t.me/jinkasei" target="_blank" rel="noopener" class="contact-card reveal">
+      <div class="contact-platform">Telegram</div>
+      <div class="contact-value">@jinkasei</div>
+      <div class="contact-cta">Buka Telegram <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5"/></svg></div>
+    </a>
+    <a href="https://instagram.com/kersenify666" target="_blank" rel="noopener" class="contact-card reveal">
+      <div class="contact-platform">Instagram</div>
+      <div class="contact-value">@kersenify666</div>
+      <div class="contact-cta">Lihat profil <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5"/></svg></div>
+    </a>
+    <a href="https://github.com/Mirai-Kanade" target="_blank" rel="noopener" class="contact-card reveal">
+      <div class="contact-platform">Github</div>
+      <div class="contact-value">Mirai Kanade</div>
+      <div class="contact-cta">Lihat repository <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5"/></svg></div>
+    </a>
+    <a href="mailto:halfyzodiac@gmail.com" class="contact-card reveal">
+      <div class="contact-platform">Gmail</div>
+      <div class="contact-value">halfyzodiac@gmail.com</div>
+      <div class="contact-cta">Kirim email <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5"/></svg></div>
+    </a>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
 <footer>
-  <div class="footer-inner">
-    <div class="footer-brand">Artoria</div>
-    <div class="footer-copy">
-      Your Highness<br>
-      halfyzodiac@gmail.com
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand-name">Artoria</div>
+      <p class="footer-tagline">Toko digital personal. Jualan bot WhatsApp, panel server, dan script, dengan harga yang jelas dari awal.</p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-label">Produk</div>
+      <a href="#produk">Sewa Bot WhatsApp</a>
+      <a href="#produk">Panel Pterodactyl</a>
+      <a href="#produk">Script Neko Arc</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-label">Kontak</div>
+      <a href="https://wa.me/6285607588713" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="https://t.me/jinkasei" target="_blank" rel="noopener">Telegram</a>
+      <a href="mailto:halfyzodiac@gmail.com">Email</a>
     </div>
   </div>
+  <div class="footer-bottom">
+    <span class="caption">© 2026 Artoria. Semua harga final.</span>
+    <span class="caption">Dikelola secara personal, dibalas dalam 1x24 jam.</span>
+  </div>
+  <div class="wordmark-banner"><span>artoria</span></div>
 </footer>
 
-<!-- FLOATING QUICK ORDER -->
-<div class="fab-order">
-  <a href="https://wa.me/6285706606594?text=Halo,%20saya%20mau%20order" target="_blank" class="fab-btn">
-    <div class="fab-icon">&#9993;</div>
-    <div class="fab-label">Quick Order</div>
-  </a>
-</div>
+<!-- ============ FAB ============ -->
+<a href="https://wa.me/6285607588713?text=Halo%2C%20saya%20mau%20order" target="_blank" rel="noopener" class="fab" aria-label="Order cepat lewat WhatsApp">
+  <svg viewBox="0 0 24 24" fill="none"><path d="M12 3a9 9 0 0 0-7.78 13.5L3 21l4.62-1.21A9 9 0 1 0 12 3Z" stroke="currentColor" stroke-width="1.5"/><path d="M8.5 9.5c.3 2.6 2.4 4.7 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+</a>
 
 <script>
-  function showPage(name) {
-    document.querySelectorAll('.page-section').forEach(function(el) {
-      el.classList.remove('active');
+  // scroll reveal
+  var els = document.querySelectorAll('.reveal');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('is-visible'); io.unobserve(e.target); }
     });
-    var target = document.getElementById('page-' + name);
-    if (target) {
-      target.classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }
+  }, { threshold: 0.12 });
+  els.forEach(function(el){ io.observe(el); });
+
+  // close mobile nav after tapping a link
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    a.addEventListener('click', function(){
+      var box = document.getElementById('navToggle');
+      if(box) box.checked = false;
+    });
+  });
 </script>
 
 </body>
