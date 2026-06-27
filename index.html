@@ -211,6 +211,19 @@ body{
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
 .reveal.is-visible{opacity:1;transform:translateY(0);}
 
+/* stagger reveal sedikit biar grid muncul satu-satu, bukan barengan */
+.product-grid .reveal:nth-child(2){transition-delay:.08s;}
+.product-grid .reveal:nth-child(3){transition-delay:.16s;}
+.reason-grid .reveal:nth-child(2){transition-delay:.08s;}
+.reason-grid .reveal:nth-child(3){transition-delay:.16s;}
+.steps .reveal:nth-child(2){transition-delay:.08s;}
+.steps .reveal:nth-child(3){transition-delay:.16s;}
+.contact-grid .reveal:nth-child(2){transition-delay:.06s;}
+.contact-grid .reveal:nth-child(3){transition-delay:.12s;}
+.contact-grid .reveal:nth-child(4){transition-delay:.18s;}
+.contact-grid .reveal:nth-child(5){transition-delay:.24s;}
+.contact-grid .reveal:nth-child(6){transition-delay:.3s;}
+
 /* ============ PRODUCT GRID ============ */
 .product-grid{
   max-width:var(--max);margin:0 auto;
@@ -297,7 +310,8 @@ body{
 }
 .contact-card:hover{border-color:var(--ink);transform:translateY(-3px);}
 .contact-platform{font-family:var(--ff-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--body);margin-bottom:10px;}
-.contact-value{font-weight:600;font-size:17px;letter-spacing:-.01em;margin-bottom:14px;word-break:break-word;}
+.contact-value{font-weight:600;font-size:17px;letter-spacing:-.01em;margin-bottom:4px;word-break:break-word;}
+.contact-sub{font-family:var(--ff-mono);font-size:12.5px;color:var(--body);margin-bottom:14px;word-break:break-word;}
 .contact-cta{font-family:var(--ff-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);display:inline-flex;align-items:center;gap:6px;}
 .contact-cta svg{width:11px;height:11px;transition:transform .2s ease;}
 .contact-card:hover .contact-cta svg{transform:translateX(3px);}
@@ -366,6 +380,84 @@ footer{background:var(--canvas);}
   .product-grid{grid-template-columns:1fr;}
   .price-row{flex-direction:column;}
   .footer-top{grid-template-columns:1fr;gap:28px;}
+}
+
+/* ============ ANIMASI TAMBAHAN ============ */
+
+/* --- 1. Entrance pas pertama buka halaman (hero), beda dari scroll-reveal --- */
+.hero-eyebrow,.hero h1,.hero p.body-lg,.hero-ctas{
+  opacity:0;animation:heroRise .7s cubic-bezier(.2,.7,.2,1) forwards;
+}
+.hero-eyebrow{animation-delay:.05s;}
+.hero h1{animation-delay:.18s;}
+.hero p.body-lg{animation-delay:.32s;}
+.hero-ctas{animation-delay:.46s;}
+@keyframes heroRise{
+  from{opacity:0;transform:translateY(22px);}
+  to{opacity:1;transform:translateY(0);}
+}
+.ribbon{animation:ribbonIn .9s cubic-bezier(.2,.7,.2,1) .15s both;}
+@keyframes ribbonIn{
+  from{opacity:0;transform:scale(.92) rotate(-2deg);}
+  to{opacity:1;transform:scale(1) rotate(0deg);}
+}
+
+/* --- 2. Nav link: garis bawah jadi "tap pulse" saat diklik, beda dari hover slide --- */
+.nav-links a{overflow:hidden;}
+.nav-links a:active{animation:navTap .35s ease;}
+@keyframes navTap{
+  0%{letter-spacing:0;}
+  40%{letter-spacing:.03em;}
+  100%{letter-spacing:0;}
+}
+
+/* --- 3. Tombol: bounce singkat saat ditekan, beda dari scale biasa --- */
+.btn:active{animation:btnPress .28s ease;}
+@keyframes btnPress{
+  0%{transform:scale(1);}
+  35%{transform:scale(.94) translateY(1px);}
+  70%{transform:scale(1.015);}
+  100%{transform:scale(1);}
+}
+
+/* --- 4. Trust chip: muncul satu-satu dengan efek pop, bukan pulse statis --- */
+.chip{opacity:0;animation:chipPop .5s cubic-bezier(.34,1.56,.64,1) forwards;}
+.trust-inner .chip:nth-child(1){animation-delay:.55s;}
+.trust-inner .chip:nth-child(2){animation-delay:.68s;}
+.trust-inner .chip:nth-child(3){animation-delay:.81s;}
+@keyframes chipPop{
+  from{opacity:0;transform:scale(.85) translateY(6px);}
+  to{opacity:1;transform:scale(1) translateY(0);}
+}
+
+/* --- 5. Contact card: arrow "melangkah" pelan terus-menerus, beda dari icon hover di product card --- */
+.contact-cta svg{animation:ctaNudge 2.2s ease-in-out infinite;}
+.contact-card:hover .contact-cta svg{animation-play-state:paused;transform:translateX(3px);}
+@keyframes ctaNudge{
+  0%,100%{transform:translateX(0);}
+  50%{transform:translateX(4px);}
+}
+
+/* --- 6. Product tag badge: kedip halus sekali waktu, beda karakter dari yang lain --- */
+.product-tag{animation:tagGlow 3.6s ease-in-out infinite;}
+@keyframes tagGlow{
+  0%,82%,100%{box-shadow:0 0 0 0 rgba(0,0,0,0);}
+  91%{box-shadow:0 0 0 4px rgba(255,255,255,.55);}
+}
+
+/* --- 7. FAB: efek ping/radar ala notifikasi, beda total dari float --- */
+.fab{position:relative;}
+.fab::before{
+  content:'';position:absolute;inset:0;border-radius:var(--r-full);
+  background:var(--ink);opacity:.55;
+  animation:fabPing 2.6s cubic-bezier(.2,.6,.4,1) infinite;
+  z-index:-1;
+}
+.fab:hover::before{animation-play-state:paused;opacity:0;}
+@keyframes fabPing{
+  0%{transform:scale(1);opacity:.45;}
+  80%{transform:scale(1.55);opacity:0;}
+  100%{transform:scale(1.55);opacity:0;}
 }
 </style>
 </head>
@@ -580,8 +672,15 @@ footer{background:var(--canvas);}
 
   <div class="contact-grid">
     <a href="https://wa.me/6285607588713" target="_blank" rel="noopener" class="contact-card reveal">
-      <div class="contact-platform">WhatsApp</div>
-      <div class="contact-value">085607588713</div>
+      <div class="contact-platform">WhatsApp · Admin 1</div>
+      <div class="contact-value">Artoria</div>
+      <div class="contact-sub">085607588713</div>
+      <div class="contact-cta">Kirim pesan <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5"/></svg></div>
+    </a>
+    <a href="https://wa.me/6283132240763" target="_blank" rel="noopener" class="contact-card reveal">
+      <div class="contact-platform">WhatsApp · Admin 2</div>
+      <div class="contact-value">KaaOffc</div>
+      <div class="contact-sub">083132240763</div>
       <div class="contact-cta">Kirim pesan <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5"/></svg></div>
     </a>
     <a href="https://t.me/jinkasei" target="_blank" rel="noopener" class="contact-card reveal">
@@ -623,7 +722,7 @@ footer{background:var(--canvas);}
     <div class="footer-col">
       <div class="footer-col-label">Kontak</div>
       <a href="https://wa.me/6285607588713" target="_blank" rel="noopener">WhatsApp</a>
-      <a href="https://t.me/jinkasei" target="_blank" rel="noopener">Telegram</a>
+      <a href="https://t.me/artoriaxd" target="_blank" rel="noopener">Telegram</a>
       <a href="mailto:halfyzodiac@gmail.com">Email</a>
     </div>
   </div>
